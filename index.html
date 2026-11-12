@@ -1,0 +1,2630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hub Territorial del Macizo y el Campo: Bioeconomía, Saberes Ancestrales, Abejas y Fibras</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tipografías combinadas: Plus Jakarta Sans, Lora (Macizo) y Nunito (Alta legibilidad campesina) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;0,700;1,500&family=Nunito:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-pergamino: #F9F6F0;
+      --verde-macizo: #1E3522;
+      --verde-esmeralda: #2E7D32;
+      --dorado-miel: #FBC02D;
+      --tierra-cacao: #5D4037;
+      --escala-texto: 1;
+    }
+
+    body {
+      font-family: 'Nunito', 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-pergamino);
+      color: #1C1917;
+      font-size: calc(18px * var(--escala-texto));
+      line-height: 1.5;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .serif-macizo {
+      font-family: 'Lora', serif;
+    }
+
+    .macizo-gradient {
+      background: linear-gradient(135deg, #2E4F33 0%, #1B3B22 50%, #0F2415 100%);
+    }
+
+    .pergamino-card {
+      background: linear-gradient(180deg, #FFFFFF 0%, #FBF8F1 100%);
+      box-shadow: 0 10px 25px -5px rgba(30, 53, 34, 0.12), 0 6px 10px -6px rgba(30, 53, 34, 0.08);
+    }
+
+    /* Botones táctiles de campo con relieve */
+    .btn-tactil {
+      min-height: 52px;
+      transition: transform 0.14s ease, box-shadow 0.14s ease;
+      box-shadow: 0 5px 0 rgba(0, 0, 0, 0.22);
+    }
+    .btn-tactil:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.22);
+    }
+
+    /* Modo Alto Contraste para Poca Visión */
+    body.alto-contraste {
+      background-color: #000000 !important;
+      color: #FFFFFF !important;
+    }
+    body.alto-contraste header,
+    body.alto-contraste nav,
+    body.alto-contraste section,
+    body.alto-contraste .pergamino-card,
+    body.alto-contraste .bg-white,
+    body.alto-contraste .bg-stone-50,
+    body.alto-contraste .bg-emerald-50,
+    body.alto-contraste .bg-amber-50,
+    body.alto-contraste .bg-red-50,
+    body.alto-contraste .bg-sky-50,
+    body.alto-contraste .bg-lime-50 {
+      background: #09090B !important;
+      color: #FFFFFF !important;
+      border-color: #FFD600 !important;
+    }
+    body.alto-contraste h1,
+    body.alto-contraste h2,
+    body.alto-contraste h3,
+    body.alto-contraste h4,
+    body.alto-contraste strong,
+    body.alto-contraste label {
+      color: #FFD600 !important;
+    }
+    body.alto-contraste .btn-tactil {
+      border: 3px solid #FFD600 !important;
+      box-shadow: 0 5px 0 #FFD600 !important;
+    }
+
+    /* Animaciones del Avatar */
+    @keyframes hablarBoca {
+      0%, 100% { transform: scaleY(0.25); }
+      50% { transform: scaleY(1.18); }
+    }
+    .avatar-hablando #boca-abierta {
+      display: block !important;
+      transform-origin: center;
+      animation: hablarBoca 0.24s infinite ease-in-out;
+    }
+    .avatar-hablando #boca-sonrisa {
+      display: none !important;
+    }
+
+    @keyframes parpadeo {
+      0%, 92%, 100% { transform: scaleY(1); }
+      96% { transform: scaleY(0.1); }
+    }
+    .ojo-avatar {
+      transform-origin: center;
+      animation: parpadeo 4s infinite;
+    }
+
+    @keyframes giroEngranaje {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .girar-suave {
+      animation: giroEngranaje 18s linear infinite;
+    }
+
+    /* Pestañas */
+    .tab-panel {
+      display: none;
+      animation: fadeUp 0.25s ease-out forwards;
+    }
+    .tab-panel.activo {
+      display: block;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Lienzo de dibujo sobre el mapa */
+    #canvas-dibujo-mapa {
+      touch-action: none;
+      cursor: crosshair;
+    }
+
+    /* Ocultar barra de scroll horizontal en pestañas móviles */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col pb-14 selection:bg-emerald-800 selection:text-white">
+
+  <!-- ===================================================================
+       1. CABECERA MAESTRA: IDENTIDAD DEL PROYECTO + SIMULADOR DE PANTALLA + ACCESIBILIDAD
+       =================================================================== -->
+  <header class="macizo-gradient text-white sticky top-0 z-50 border-b-4 border-[#FBC02D] shadow-2xl">
+    <div class="max-w-7xl mx-auto px-3 sm:px-5 py-2.5">
+      
+      <!-- Fila Superior: Marca Unificada + Controles de Pantalla, Visión, Voz Muda y Avatar -->
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-emerald-700/80">
+        
+        <!-- Título Maestro -->
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-amber-400/20 border-2 border-[#FBC02D] flex items-center justify-center text-3xl shadow">
+            🌱
+          </div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h1 class="serif-macizo text-lg sm:text-xl font-bold text-amber-200 leading-tight">
+                Hub Territorial: Ciencia, Saberes Ancestrales y Bioeconomía
+              </h1>
+              <span class="text-xs bg-emerald-800 text-emerald-100 border border-emerald-500 px-2.5 py-0.5 rounded-full font-extrabold">
+                IAP • ECA • OVOP • SENA
+              </span>
+            </div>
+            <p class="text-xs sm:text-sm text-emerald-200 font-semibold">
+              Bienestar Alimentario • Abejas • Fibras para Bioplásticos • Agricultura de Precisión • Saberes Originarios
+            </p>
+          </div>
+        </div>
+
+        <!-- Barra de Herramientas Inclusivas y Simulador de Dispositivo -->
+        <div class="flex flex-wrap items-center gap-2">
+          
+          <!-- Selector de Vista de Pantalla (Del Artefacto Cafeto Macizo) -->
+          <div class="bg-black/35 border border-emerald-400/40 rounded-xl px-2.5 py-1.5 flex items-center gap-1.5 text-xs sm:text-sm">
+            <span>📱</span>
+            <select id="selector-modo-pantalla" onchange="cambiarModoPantalla(this.value)"
+              class="bg-transparent text-amber-100 font-bold focus:outline-none cursor-pointer">
+              <option value="fluida" class="bg-stone-900 text-white">Pantalla Completa</option>
+              <option value="celular" class="bg-stone-900 text-white">Vista Celular (Móvil)</option>
+              <option value="tablet" class="bg-stone-900 text-white">Vista Tablet</option>
+              <option value="escritorio" class="bg-stone-900 text-white">Vista PC</option>
+            </select>
+          </div>
+
+          <!-- Tamaño de Letra A- / Normal / A+ -->
+          <div class="bg-black/35 border border-white/20 rounded-xl p-1 flex items-center text-xs sm:text-sm font-black">
+            <button onclick="ajustarEscalaTexto(-0.12)" class="px-2.5 py-1 hover:bg-white/15 rounded-lg text-amber-200" title="Reducir letra">A-</button>
+            <button onclick="reiniciarEscalaTexto()" class="px-2.5 py-1 hover:bg-white/15 rounded-lg text-white" title="Letra normal">Normal</button>
+            <button onclick="ajustarEscalaTexto(0.18)" class="px-2.5 py-1 hover:bg-white/15 rounded-lg text-amber-300" title="Letra gigante para baja visión">A+</button>
+          </div>
+
+          <!-- Botón Poca Visión (Alto Contraste) -->
+          <button onclick="alternarAltoContraste()" id="btn-alto-contraste"
+            class="bg-[#FBC02D] hover:bg-amber-300 text-stone-950 font-black px-3 py-1.5 rounded-xl text-xs sm:text-sm border-2 border-stone-950 flex items-center gap-1.5 shadow">
+            <span>👁️</span> <span id="lbl-contraste">Poca Visión</span>
+          </button>
+
+          <!-- Botón Tablero Comunicador para Personas Mudas -->
+          <button onclick="abrirModalComunicadorMudo()"
+            class="bg-sky-400 hover:bg-sky-300 text-stone-950 font-black px-3 py-1.5 rounded-xl text-xs sm:text-sm border-2 border-stone-950 flex items-center gap-1.5 shadow">
+            <span>👐🗣️</span> <span>Voz para Personas Mudas</span>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- Fila Inferior: Avatar Guía Animado + Selector de los 6 Sabedores + Burbuja Parlante -->
+      <div class="pt-2.5 flex flex-col lg:flex-row items-center justify-between gap-3">
+        
+        <!-- Avatar SVG Animado y Selector de Personaje -->
+        <div class="flex items-center gap-3 bg-emerald-950/90 px-3.5 py-2 rounded-2xl border-2 border-[#FBC02D] shrink-0 w-full lg:w-auto justify-between lg:justify-start">
+          <div class="flex items-center gap-3">
+            <div id="avatar-contenedor-svg" onclick="hablarMensajeActualAvatar()"
+              class="cursor-pointer relative w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-amber-100 border-3 border-[#FBC02D] flex items-center justify-center shrink-0 shadow-inner"
+              title="Toca al guía para escuchar">
+              <svg viewBox="0 0 120 120" class="w-full h-full">
+                <circle cx="60" cy="60" r="56" fill="#E0F2FE" />
+                <path id="svg-ropa" d="M20 115 Q60 85 100 115" fill="#2E7D32" stroke="#14532D" stroke-width="3" />
+                <path d="M42 93 Q60 108 78 93 L60 105 Z" fill="#DC2626" />
+                <g id="svg-trenzas" class="hidden">
+                  <path d="M28 58 Q18 82 25 104" stroke="#27272A" stroke-width="9" stroke-linecap="round" fill="none" />
+                  <path d="M92 58 Q102 82 95 104" stroke="#27272A" stroke-width="9" stroke-linecap="round" fill="none" />
+                </g>
+                <circle id="svg-piel" cx="60" cy="64" r="28" fill="#D99B66" stroke="#78350F" stroke-width="2.5" />
+                <circle cx="43" cy="69" r="4" fill="#F87171" opacity="0.5" />
+                <circle cx="77" cy="69" r="4" fill="#F87171" opacity="0.5" />
+                <g class="ojo-avatar">
+                  <circle cx="49" cy="60" r="3.8" fill="#1F2937" />
+                  <circle cx="71" cy="60" r="3.8" fill="#1F2937" />
+                  <circle cx="50.5" cy="58.5" r="1.3" fill="#FFFFFF" />
+                  <circle cx="72.5" cy="58.5" r="1.3" fill="#FFFFFF" />
+                </g>
+                <path id="svg-ceja-1" d="M43 52 Q49 49 54 52" stroke="#451A03" stroke-width="2.8" stroke-linecap="round" fill="none" />
+                <path id="svg-ceja-2" d="M66 52 Q71 49 77 52" stroke="#451A03" stroke-width="2.8" stroke-linecap="round" fill="none" />
+                <path id="svg-bigote" d="M47 73 Q60 68 73 73" stroke="#451A03" stroke-width="4" stroke-linecap="round" fill="none" />
+                <path id="boca-sonrisa" d="M49 77 Q60 86 71 77" stroke="#78350F" stroke-width="3.2" stroke-linecap="round" fill="none" />
+                <ellipse id="boca-abierta" cx="60" cy="79" rx="8.5" ry="6" fill="#7F1D1D" stroke="#451A03" stroke-width="2" style="display:none;" />
+                <ellipse cx="60" cy="39" rx="45" ry="10.5" fill="#FDE047" stroke="#854D0E" stroke-width="3" />
+                <path d="M35 38 Q60 12 85 38 Z" fill="#FACC15" stroke="#854D0E" stroke-width="3" />
+                <path d="M37 33 Q60 28 83 33" stroke="#1F2937" stroke-width="3.5" fill="none" />
+              </svg>
+              <span id="icono-mini-avatar" class="absolute -bottom-1 -right-1 bg-[#FBC02D] text-stone-950 text-lg w-7 h-7 rounded-full flex items-center justify-center border border-stone-900 shadow">
+                👨‍🌾
+              </span>
+            </div>
+
+            <div>
+              <label for="selector-avatar" class="block text-[11px] font-black uppercase text-amber-300 tracking-wider">
+                Elige tu Guía Sabedor:
+              </label>
+              <select id="selector-avatar" onchange="cambiarAvatarGuia(this.value)"
+                class="bg-emerald-900 text-white font-extrabold text-sm sm:text-base rounded-xl px-2.5 py-1 border border-amber-400/60 focus:outline-none cursor-pointer">
+                <option value="Don Santiago">👨‍🌾 Don Santiago (Líder del Macizo)</option>
+                <option value="Doña Manuela">👩‍🌾 Doña Manuela (Guardiana de Semillas)</option>
+                <option value="Don José">👴 Don José (Abuelo Sabedor Ancestral)</option>
+                <option value="Doña Fanny">👵 Doña Fanny (Abuela de las Abejas)</option>
+                <option value="Don Jacinto">🪮 Don Jacinto (Fibras y Precisión)</option>
+                <option value="Doña Rosita">🌱 Doña Rosita (Joven Líder ECA)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Burbuja Parlante con Subtítulo Accesible y Botones de Audio -->
+        <div class="flex-grow w-full bg-white text-stone-900 rounded-2xl p-3 border-3 border-[#FBC02D] shadow-inner flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div class="flex items-center gap-3 text-center sm:text-left">
+            <span id="gesto-burbuja" class="text-3xl sm:text-4xl shrink-0">🌿👐</span>
+            <div>
+              <span id="etiqueta-rol-avatar" class="text-xs font-black uppercase text-emerald-800 block">
+                Don Santiago (Líder del Macizo) — Voz y Subtítulo en Vivo:
+              </span>
+              <p id="texto-burbuja-avatar" class="text-base sm:text-lg font-extrabold text-stone-900 leading-snug">
+                ¡Bienvenidos! Aquí unimos nuestros tres trabajos: Saberes Ancestrales, Hub del Macizo, Abejas, Agricultura de Precisión y Fibras para Bioplásticos.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 shrink-0">
+            <button onclick="hablarMensajeActualAvatar()"
+              class="btn-tactil bg-[#FBC02D] hover:bg-amber-400 text-stone-950 font-black px-4 py-2 rounded-xl text-sm sm:text-base border-2 border-stone-900 flex items-center gap-1.5">
+              <span>🔊</span> <span>Escuchar</span>
+            </button>
+            <button onclick="detenerSintesisVoz()"
+              class="btn-tactil bg-red-600 hover:bg-red-700 text-white font-black px-3 py-2 rounded-xl text-sm sm:text-base border-2 border-stone-900"
+              title="Detener voz">
+              ⏹️
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================================================================
+       CONTENEDOR ENVOLVENTE PARA SIMULACIÓN DE PANTALLA (MÓVIL / TABLET / PC)
+       =================================================================== -->
+  <div id="envoltorio-pantalla" class="w-full flex justify-center transition-all duration-300 px-2 sm:px-4 pt-4">
+    <div id="contenedor-dispositivo" class="w-full max-w-7xl flex flex-col transition-all duration-300">
+
+      <!-- ===============================================================
+           MENÚ DE NAVEGACIÓN POR 7 PESTAÑAS INTEGRADORAS
+           =============================================================== -->
+      <nav class="bg-stone-900 text-stone-100 rounded-3xl p-2.5 shadow-xl border-2 border-emerald-800/60 mb-6">
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+          
+          <button onclick="activarPestana(1)" id="btn-tab-1"
+            class="tab-btn btn-tactil bg-emerald-700 text-white border-2 border-[#FBC02D] rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
+            <span class="text-2xl">🌳</span>
+            <span class="font-black text-xs sm:text-sm leading-tight mt-0.5">1. Síntesis y Árbol</span>
+            <span class="text-[11px] text-amber-200 font-bold">Venn + Cienciometría</span>
+          </button>
+
+          <button onclick="activarPestana(2)" id="btn-tab-2"
+            class="tab-btn btn-tactil bg-stone-800 hover:bg-stone-700 text-stone-200 border-2 border-stone-700 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
+            <span class="text-2xl">❓</span>
+            <span class="font-black text-xs sm:text-sm leading-tight mt-0.5">2. Problema y Sampieri</span>
+            <span class="text-[11px] text-stone-400 font-bold">Pregunta + Alcances</span>
+          </button>
+
+          <button onclick="activarPestana(3)" id="btn-tab-3"
+            class="tab-btn btn-tactil bg-stone-800 hover:bg-stone-700 text-stone-200 border-2 border-stone-700 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
+            <span class="text-2xl">🧭</span>
+            <span class="font-black text-xs sm:text-sm leading-tight mt-0.5">3. Ruta Metodológica</span>
+            <span class="text-[11px] text-stone-400 font-bold">5 Pasos + Ciclo IAP</span>
+          </button>
+
+          <button onclick="activarPestana(4)" id="btn-tab-4"
+            class="tab-btn btn-tactil bg-stone-800 hover:bg-stone-700 text-stone-200 border-2 border-stone-700 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
+            <span class="text-2xl">🗺️✏️</span>
+            <span class="font-black text-xs sm:text-sm leading-tight mt-0.5">4. Mapas Parlantes</span>
+            <span class="text-[11px] text-stone-400 font-bold">Lápiz + GPS + Satélite</span>
+          </button>
+
+          <button onclick="activarPestana(5)" id="btn-tab-5"
+            class="tab-btn btn-tactil bg-stone-800 hover:bg-stone-700 text-stone-200 border-2 border-stone-700 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
+            <span class="text-2xl">🐝🪢</span>
+            <span class="font-black text-xs sm:text-sm leading-tight mt-0.5">5. Laboratorio ECA</span>
+            <span class="text-[11px] text-stone-400 font-bold">Abejas, Bioinsumos y Fibra</span>
+          </button>
+
+          <button onclick="activarPestana(6)" id="btn-tab-6"
+            class="tab-btn btn-tactil bg-stone-800 hover:bg-stone-700 text-stone-200 border-2 border-stone-700 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
+            <span class="text-2xl">📦⚖️</span>
+            <span class="font-black text-xs sm:text-sm leading-tight mt-0.5">6. Prueba de Caja</span>
+            <span class="text-[11px] text-stone-400 font-bold">Votación + Costo-Beneficio</span>
+          </button>
+
+          <button onclick="activarPestana(7)" id="btn-tab-7"
+            class="tab-btn btn-tactil col-span-2 sm:col-span-1 bg-stone-800 hover:bg-stone-700 text-stone-200 border-2 border-stone-700 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
+            <span class="text-2xl">📹📂</span>
+            <span class="font-black text-xs sm:text-sm leading-tight mt-0.5">7. Sala y Bitácora</span>
+            <span class="text-[11px] text-stone-400 font-bold">Cámara, Chat y Archivos</span>
+          </button>
+
+        </div>
+      </nav>
+
+      <!-- ===============================================================
+           CONTENIDO PRINCIPAL DE LAS 7 PESTAÑAS
+           =============================================================== -->
+      <main class="space-y-8">
+
+        <!-- =============================================================
+             PESTAÑA 1: SÍNTESIS, ECOSISTEMA DEL CAMBIO (VENN), ÁRBOL DEL CONOCIMIENTO Y PÓSITS
+             ============================================================= -->
+        <section id="panel-tab-1" class="tab-panel activo space-y-6">
+          
+          <!-- Tarjeta de Título Unificado de los 3 Aportes -->
+          <div class="pergamino-card rounded-3xl p-6 sm:p-8 border-2 border-emerald-900/20">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-5 border-b-2 border-stone-200">
+              <div>
+                <span class="bg-emerald-800 text-amber-200 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">
+                  Proyecto Maestro Integrado • 3 Investigaciones en 1
+                </span>
+                <h2 class="serif-macizo text-2xl sm:text-4xl font-bold text-emerald-950 mt-2">
+                  Soberanía Tecnológica, Alimentaria y Bioeconomía en el Territorio
+                </h2>
+              </div>
+              <button onclick="narrarTexto('Título unificado del proyecto: Construcción comunitaria de un Hub Territorial para la Soberanía Tecnológica y Alimentaria: una experiencia de Investigación Acción Participativa, Escuelas de Campo y Saberes Ancestrales que integra agricultura de precisión, conservación de abejas, bioinsumos y fibras naturales para biocompuestos.', '🌱🤝')"
+                class="btn-tactil bg-emerald-800 hover:bg-emerald-900 text-white font-black px-5 py-2.5 rounded-2xl text-sm flex items-center gap-2 shrink-0">
+                <span>🔊</span> <span>Escuchar con mi Avatar</span>
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6 items-center">
+              <div class="lg:col-span-7 space-y-4">
+                <div class="bg-emerald-50/90 p-5 rounded-2xl border-2 border-emerald-800/30">
+                  <h3 class="text-xs font-black uppercase text-emerald-900 tracking-wider mb-1">
+                    Título Consolidado del Proyecto Grupal
+                  </h3>
+                  <p class="serif-macizo text-lg sm:text-xl font-bold text-emerald-950 leading-relaxed">
+                    «Construcción comunitaria de un Hub Territorial de Productos de Naturaleza y Bioeconomía Circular: integración de Saberes Ancestrales, Biotecnología Agroambiental, Agricultura de Precisión, Conservación de Abejas y Aprovechamiento de Fibras Residuales mediante IAP y Escuelas de Campo (ECAs) para el Bienestar Alimentario y el Relevo Generacional»
+                  </p>
+                </div>
+
+                <div class="bg-amber-50/80 p-5 rounded-2xl border-2 border-amber-700/30">
+                  <h3 class="text-xs font-black uppercase text-amber-950 tracking-wider mb-1">
+                    Explicación Sencilla para Toda la Vereda (Sin tecnicismos)
+                  </h3>
+                  <p class="text-stone-800 font-bold text-base sm:text-lg">
+                    Unimos la sabiduría de los abuelos y pueblos originarios con herramientas sencillas: primero aseguramos la <strong>comida sana de la familia</strong>, preparamos <strong>abonos naturales (bioinsumos)</strong>, cuidamos a las <strong>abejitas</strong> sin echarles veneno, usamos el <strong>celular en el lote</strong> y del tallo que sobra sacamos <strong>fibra fuerte para plásticos</strong>, logrando que los jóvenes vean futuro en el campo.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Diagrama de Venn Interactivo: "La Síntesis: El Ecosistema del Cambio" -->
+              <div class="lg:col-span-5 bg-stone-900 text-white rounded-3xl p-5 border-3 border-[#FBC02D] text-center">
+                <span class="text-xs font-black uppercase text-amber-300 tracking-wider">
+                  ✨ Toca cada círculo del Ecosistema del Cambio
+                </span>
+                <h3 class="serif-macizo text-xl font-bold text-white mt-1 mb-3">
+                  La Síntesis: El Ecosistema del Cambio
+                </h3>
+
+                <svg viewBox="0 0 360 280" class="w-full max-w-sm mx-auto cursor-pointer">
+                  <!-- Círculo 1: Biotecnología, Precisión y Fibras -->
+                  <g onclick="seleccionarNodoVenn('BIOTEC')">
+                    <circle cx="180" cy="95" r="72" fill="rgba(16, 185, 129, 0.38)" stroke="#34D399" stroke-width="3" />
+                    <text x="180" y="62" fill="#ECFDF5" font-size="12" font-weight="bold" text-anchor="middle">1. Biotecnología,</text>
+                    <text x="180" y="77" fill="#ECFDF5" font-size="12" font-weight="bold" text-anchor="middle">Precisión y Fibras</text>
+                  </g>
+                  <!-- Círculo 2: Metodología IAP / ECA / Hub -->
+                  <g onclick="seleccionarNodoVenn('IAP')">
+                    <circle cx="122" cy="182" r="72" fill="rgba(245, 158, 11, 0.38)" stroke="#FBBF24" stroke-width="3" />
+                    <text x="88" y="195" fill="#FEF3C7" font-size="12" font-weight="bold" text-anchor="middle">2. Metodología</text>
+                    <text x="88" y="210" fill="#FEF3C7" font-size="12" font-weight="bold" text-anchor="middle">IAP / ECA / Hub</text>
+                  </g>
+                  <!-- Círculo 3: Conocimiento Ancestral y Abejas -->
+                  <g onclick="seleccionarNodoVenn('ANCESTRAL')">
+                    <circle cx="238" cy="182" r="72" fill="rgba(56, 189, 248, 0.38)" stroke="#38BDF8" stroke-width="3" />
+                    <text x="272" y="195" fill="#E0F2FE" font-size="12" font-weight="bold" text-anchor="middle">3. Conocimiento</text>
+                    <text x="272" y="210" fill="#E0F2FE" font-size="12" font-weight="bold" text-anchor="middle">Ancestral y Abejas</text>
+                  </g>
+                  <!-- Centro: Soberanía Tecnológica y Alimentaria -->
+                  <g onclick="seleccionarNodoVenn('CENTRO')">
+                    <circle cx="180" cy="154" r="40" fill="#FBC02D" stroke="#FFFFFF" stroke-width="3" />
+                    <text x="180" y="146" fill="#1C1917" font-size="10.5" font-weight="900" text-anchor="middle">SOBERANÍA</text>
+                    <text x="180" y="159" fill="#1C1917" font-size="10.5" font-weight="900" text-anchor="middle">TECNOLÓGICA Y</text>
+                    <text x="180" y="172" fill="#1C1917" font-size="10.5" font-weight="900" text-anchor="middle">ALIMENTARIA</text>
+                  </g>
+                </svg>
+
+                <div id="info-venn-box" class="bg-emerald-950/90 p-3 rounded-2xl border border-amber-400/50 text-xs sm:text-sm text-amber-100 font-bold">
+                  👆 Toca cualquiera de los 3 círculos o el centro dorado para escuchar cómo se unen nuestras investigaciones.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- EL ÁRBOL DEL CONOCIMIENTO CIENTÍFICO (Cienciometría de 76 documentos Scopus/WoS + Saberes) -->
+          <div class="pergamino-card rounded-3xl p-6 sm:p-8 border-2 border-amber-900/20">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+              <div>
+                <span class="bg-amber-100 text-amber-900 text-xs font-black px-3 py-1 rounded-full uppercase">
+                  Aporte Cienciométrico (76 Documentos Estructurales Scopus / WoS)
+                </span>
+                <h3 class="serif-macizo text-2xl sm:text-3xl font-bold text-stone-900 mt-1">
+                  🌳 El Árbol del Conocimiento Científico y Tradicional
+                </h3>
+                <p class="text-sm sm:text-base text-stone-600 font-bold">
+                  La biotecnología avanza rápido, pero sin las raíces de los pueblos originarios y campesinos no logra apropiación en el territorio. Toca cada parte del árbol:
+                </p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+              
+              <!-- Raíces -->
+              <div onclick="narrarTexto('Raíces del árbol: Conocimiento tradicional, custodia de semillas nativas, ecología microbiana local del suelo y memoria biocultural de los abuelos y pueblos originarios.', '🌱🪱')"
+                class="cursor-pointer bg-amber-50 hover:bg-amber-100 border-3 border-[#5D4037] rounded-3xl p-5 transition shadow-md flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="bg-[#5D4037] text-white font-black text-xs px-3 py-1 rounded-full uppercase">1. Las Raíces</span>
+                    <span class="text-3xl">🌱🪱🏺</span>
+                  </div>
+                  <h4 class="serif-macizo text-xl font-bold text-amber-950">Conocimiento Tradicional y Ecología Microbiana</h4>
+                  <p class="text-sm sm:text-base text-stone-700 font-bold mt-2">
+                    Saberes ancestrales, semillas nativas custodiadas por mujeres rurales, microorganismos eficientes de montaña y respeto por las abejas.
+                  </p>
+                </div>
+                <span class="mt-4 inline-block text-xs font-black text-amber-950 bg-amber-200 px-3 py-1.5 rounded-xl text-center">🔊 Toca para escuchar las Raíces</span>
+              </div>
+
+              <!-- Tronco -->
+              <div onclick="narrarTexto('Tronco del árbol: Agrobiotecnología, estructuras biológicas, manejo integrado del cultivo y agricultura de precisión de bajo costo guiada desde las Escuelas de Campo.', '🪵🔬')"
+                class="cursor-pointer bg-stone-100 hover:bg-stone-200 border-3 border-stone-600 rounded-3xl p-5 transition shadow-md flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="bg-stone-800 text-white font-black text-xs px-3 py-1 rounded-full uppercase">2. El Tronco</span>
+                    <span class="text-3xl">🪵🔬📱</span>
+                  </div>
+                  <h4 class="serif-macizo text-xl font-bold text-stone-900">Agrobiotecnología y Precisión Apropiada</h4>
+                  <p class="text-sm sm:text-base text-stone-700 font-bold mt-2">
+                    El puente técnico: análisis del agroecosistema (AAE), zonificación de parcelas con celular/GPS y procesamiento artesanal de biomasa.
+                  </p>
+                </div>
+                <span class="mt-4 inline-block text-xs font-black text-stone-900 bg-stone-300 px-3 py-1.5 rounded-xl text-center">🔊 Toca para escuchar el Tronco</span>
+              </div>
+
+              <!-- Hojas y Frutos -->
+              <div onclick="narrarTexto('Hojas y frutos del árbol: Innovación en bioeconomía circular, bienestar alimentario familiar, bioinsumos como Bokashi y humus, polinización y fibras naturales para reforzar bioplásticos.', '🍃🍌')"
+                class="cursor-pointer bg-emerald-50 hover:bg-emerald-100 border-3 border-[#2E7D32] rounded-3xl p-5 transition shadow-md flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="bg-[#2E7D32] text-white font-black text-xs px-3 py-1 rounded-full uppercase">3. Hojas y Frutos</span>
+                    <span class="text-3xl">🍃🍌🪢</span>
+                  </div>
+                  <h4 class="serif-macizo text-xl font-bold text-emerald-950">Innovación, Bioeconomía, Bioinsumos y Fibras</h4>
+                  <p class="text-sm sm:text-base text-stone-700 font-bold mt-2">
+                    Alimento limpio para la familia, biofertilizantes locales, miel/polinización y fibras lignocelulósicas para refuerzo de matrices plásticas.
+                  </p>
+                </div>
+                <span class="mt-4 inline-block text-xs font-black text-emerald-950 bg-emerald-200 px-3 py-1.5 rounded-xl text-center">🔊 Toca para escuchar las Hojas</span>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- MURAL DE PÓSITS DEL DIAGNÓSTICO DE CAMPO (Tus 2 Tableros Fotográficos) -->
+          <div class="pergamino-card rounded-3xl p-6 sm:p-8 border-2 border-stone-300">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5">
+              <div>
+                <span class="bg-amber-300 text-stone-950 text-xs font-black px-3 py-1 rounded-full uppercase">
+                  Sistematización de los 2 Tableros de Pósits
+                </span>
+                <h3 class="serif-macizo text-2xl font-bold text-stone-900 mt-1">
+                  📌 Mural de Ideación y Diagnóstico Participativo
+                </h3>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button onclick="filtrarPosits('TODOS')" class="bg-emerald-800 text-white text-xs font-black px-3 py-1.5 rounded-xl">Todos (12)</button>
+                <button onclick="filtrarPosits('PROBLEMA')" class="bg-yellow-200 text-stone-900 text-xs font-black px-3 py-1.5 rounded-xl">Tablero 1: Problemas</button>
+                <button onclick="filtrarPosits('HUB')" class="bg-sky-200 text-stone-900 text-xs font-black px-3 py-1.5 rounded-xl">Tablero 2: Hub y Pedagogía</button>
+              </div>
+            </div>
+
+            <div id="grid-posits-diagnostico" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <!-- Se llena dinámicamente con JS -->
+            </div>
+          </div>
+
+        </section>
+
+        <!-- =============================================================
+             PESTAÑA 2: EL PROBLEMA, MATRIZ DE FREIRE, PLANTEAMIENTO SAMPIERI Y ALCANCES
+             ============================================================= -->
+        <section id="panel-tab-2" class="tab-panel space-y-6">
+          
+          <!-- 1. La Brecha Tecnológica: Modelo Productivista vs. Modelo Multifuncional Ancestral -->
+          <div class="pergamino-card rounded-3xl p-6 sm:p-8 border-2 border-stone-300">
+            <span class="bg-red-100 text-red-900 text-xs font-black px-3 py-1 rounded-full uppercase">
+              El Problema que dio origen al Interés Investigativo
+            </span>
+            <h2 class="serif-macizo text-2xl sm:text-3xl font-bold text-stone-900 mt-1">
+              La Brecha Tecnológica y la Desconexión con el Saber Local
+            </h2>
+            <p class="text-base text-stone-700 font-bold mt-1">
+              La falta de apropiación tecnológica en el campo nace de imponer recetas externas que ignoran la sabiduría ancestral y la realidad económica de las veredas:
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-5">
+              <!-- Modelo Productivista -->
+              <div onclick="narrarTexto('Modelo Productivista Impositivo: Uso excesivo de agroquímicos costosos, monocultivo vulnerable a plagas como ocurrió históricamente con Phytophthora infestans en la hambruna de la papa, muerte de abejas, endeudamiento y pérdida de soberanía alimentaria.', '☠️🚜')"
+                class="cursor-pointer bg-red-50/90 border-3 border-red-400 rounded-3xl p-5 space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="bg-red-700 text-white text-xs font-black px-3 py-1 rounded-full uppercase">❌ Modelo Productivista Excluyente</span>
+                  <span class="text-3xl">🛢️☠️🚜</span>
+                </div>
+                <h3 class="text-xl font-black text-red-950">Dependencia Química y Crisis Rural</h3>
+                <ul class="text-sm sm:text-base text-stone-800 font-bold space-y-2 list-disc pl-5">
+                  <li><strong>Advertencia histórica (<em>Phytophthora infestans</em>):</strong> El desequilibrio del monocultivo y los agrotóxicos destruye la microbiota y mata a los polinizadores (abejas).</li>
+                  <li><strong>Desaprovechamiento de biomasa:</strong> Los pseudotallos y residuos fibrosos se pudren en el lote sin generar valor.</li>
+                  <li><strong>Desarraigo juvenil:</strong> Falta de financiación a largo plazo, difícil salida de productos de zonas apartadas y migración de los jóvenes.</li>
+                </ul>
+              </div>
+
+              <!-- Modelo Multifuncional Ancestral y Bioeconomía -->
+              <div onclick="narrarTexto('Modelo Multifuncional Ancestral y Bioeconomía Circular: Policultivos para el bienestar alimentario, protección del saber ancestral contra la biopiratería, ecología microbiana, corredor de abejas y aprovechamiento de fibras naturales para biocompuestos.', '🌱🐝')"
+                class="cursor-pointer bg-emerald-50/90 border-3 border-[#2E7D32] rounded-3xl p-5 space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="bg-[#2E7D32] text-white text-xs font-black px-3 py-1 rounded-full uppercase">✅ Modelo Multifuncional Ancestral y Circular</span>
+                  <span class="text-3xl">🌱🐝🛡️</span>
+                </div>
+                <h3 class="text-xl font-black text-emerald-950">Soberanía Alimentaria y Valor en Finca</h3>
+                <ul class="text-sm sm:text-base text-stone-800 font-bold space-y-2 list-disc pl-5">
+                  <li><strong>Protección del Saber Ancestral:</strong> Resguardo de semillas nativas y recursos genéticos frente a la apropiación indebida (biopiratería).</li>
+                  <li><strong>Aprovechamiento Dual (Comida + Fibra):</strong> El cultivo alimenta a la familia y su residuo fibroso refuerza plásticos biodegradables.</li>
+                  <li><strong>Tecnología Blanda y de Bajo Costo:</strong> Bioinsumos preparados en finca y celulares con GPS offline manejados por jóvenes rurales.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Matriz de Diagnóstico Pedagógico: Extensión Convencional vs. Escuelas de Campo / IAP (Paulo Freire) -->
+          <div class="pergamino-card rounded-3xl p-6 sm:p-8 border-2 border-amber-800/30">
+            <span class="bg-amber-200 text-amber-950 text-xs font-black px-3 py-1 rounded-full uppercase">
+              Respuesta al Pósit: «¿Cómo transmitir pedagógicamente el proyecto?»
+            </span>
+            <h3 class="serif-macizo text-2xl font-bold text-stone-900 mt-1 mb-4">
+              Matriz de Diagnóstico: Dos Enfoques para el Desarrollo Rural
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="bg-stone-100 rounded-2xl p-5 border-2 border-stone-400 space-y-3">
+                <h4 class="text-lg font-black text-stone-800 flex items-center gap-2">
+                  <span>📢⬇️</span> <span>Extensión Convencional (Transferencia Vertical)</span>
+                </h4>
+                <div class="bg-white p-3.5 rounded-xl border border-stone-300 text-sm sm:text-base font-bold text-stone-700">
+                  ⚙️ <strong>Enfoque paternalista:</strong> El técnico externo llega como único "experto".
+                </div>
+                <div class="bg-white p-3.5 rounded-xl border border-stone-300 text-sm sm:text-base font-bold text-stone-700">
+                  🔒 <strong>Sujeto pasivo:</strong> El campesino solo memoriza recetas químicas sin comprender el porqué.
+                </div>
+                <div class="bg-white p-3.5 rounded-xl border border-stone-300 text-sm sm:text-base font-bold text-stone-700">
+                  ⬇️ <strong>Comunicación de una sola vía:</strong> Mecánica y ajena a la cultura local.
+                </div>
+              </div>
+
+              <div class="bg-emerald-50 rounded-2xl p-5 border-2 border-[#2E7D32] space-y-3">
+                <h4 class="text-lg font-black text-emerald-950 flex items-center gap-2">
+                  <span>🤝🔍</span> <span>Escuelas de Campo / IAP (Auto-aprendizaje Democrático)</span>
+                </h4>
+                <div class="bg-white p-3.5 rounded-xl border border-emerald-400 text-sm sm:text-base font-bold text-stone-800">
+                  🌱 <strong>Enfoque democrático (Paulo Freire):</strong> Relación sujeto-sujeto; el facilitador es un guía.
+                </div>
+                <div class="bg-white p-3.5 rounded-xl border border-emerald-400 text-sm sm:text-base font-bold text-stone-800">
+                  🔍 <strong>Agricultor como investigador activo:</strong> Despierta la <em>curiosidad, indagación e interés</em> con conciencia crítica.
+                </div>
+                <div class="bg-white p-3.5 rounded-xl border border-emerald-400 text-sm sm:text-base font-bold text-stone-800">
+                  🔄 <strong>Comunicación de doble vía:</strong> Descubrimiento empírico en la parcela como laboratorio vivo.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Planteamiento Cualitativo (Hernández-Sampieri Cap. 12) + Preguntas de Revista + Objetivos -->
+          <div class="pergamino-card rounded-3xl p-6 sm:p-8 border-2 border-emerald-900/30 space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+              <div>
+                <span class="bg-emerald-800 text-white text-xs font-black px-3 py-1 rounded-full uppercase">
+                  Congruencia Metodológica Cap. 12 Hernández-Sampieri (Enfoque Cualitativo / IAP)
+                </span>
+                <h3 class="serif-macizo text-2xl sm:text-3xl font-bold text-emerald-950 mt-1">
+                  Interés, Pregunta de Investigación y Objetivos Unificados
+                </h3>
+              </div>
+              <button onclick="narrarTexto('Pregunta central de investigación: ¿De qué manera la cocreación de un Hub Territorial fundamentado en Escuelas de Campo, saberes ancestrales y agricultura de precisión permite integrar el bienestar alimentario, los bioinsumos, la conservación de abejas y el aprovechamiento de fibras residuales para fortalecer el relevo generacional rural?', '📖🎯')"
+                class="btn-tactil bg-[#FBC02D] text-stone-950 font-black px-4 py-2 rounded-xl text-sm border-2 border-stone-900">
+                🔊 Oír Pregunta y Objetivos
+              </button>
+            </div>
+
+            <!-- Guion Oficial de Propósito Central (Sampieri pág. 359) -->
+            <div class="bg-stone-50 p-5 rounded-2xl border-l-8 border-emerald-700 text-sm sm:text-base font-bold text-stone-800">
+              <span class="text-xs font-black uppercase text-emerald-800 block mb-1">
+                Interés y Propósito Central (Guion de Hernández-Sampieri y Creswell):
+              </span>
+              «El propósito de este estudio de <strong>Investigación-Acción Participativa (IAP)</strong> es <strong>comprender, describir y cocrear</strong> el proceso de apropiación pedagógica de la bioeconomía circular, la agrobiotecnología ancestral y la agricultura de precisión de bajo costo en <strong>jóvenes rurales, mujeres custodias de semillas, sabedores ancestrales y familias campesinas</strong> de <strong>unidades productivas vinculadas a un Hub Territorial</strong>, utilizando como instrumentos <strong>mapas parlantes, diario de campo, diálogos de saberes, análisis del agroecosistema (AAE) y la prueba de caja</strong> en Escuelas de Campo (ECAs)».
+            </div>
+
+            <!-- Preguntas de Investigación (Selector de Formato: Revista Científica / Sampieri / Campesina) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="bg-emerald-950 text-white p-5 rounded-2xl border-2 border-[#FBC02D]">
+                <span class="text-xs font-black uppercase text-amber-300">1. Formato Corto Revista Indexada</span>
+                <p class="serif-macizo text-lg font-bold mt-2">
+                  «¿Cómo articula un Hub Territorial los saberes ancestrales, la bioeconomía circular y la agricultura de precisión para fortalecer el bienestar alimentario y el relevo generacional?»
+                </p>
+              </div>
+
+              <div class="bg-emerald-900 text-white p-5 rounded-2xl border-2 border-emerald-400">
+                <span class="text-xs font-black uppercase text-emerald-200">2. Formato Cualitativo Sampieri (Fig. 12.1)</span>
+                <p class="serif-macizo text-lg font-bold mt-2">
+                  «¿Cuál es el significado para las familias y jóvenes rurales de participar en Escuelas de Campo (IAP) y cómo se vincula con los bioinsumos, la protección de abejas y el refuerzo plástico con fibras naturales?»
+                </p>
+              </div>
+
+              <div class="bg-amber-100 text-stone-950 p-5 rounded-2xl border-2 border-amber-600">
+                <span class="text-xs font-black uppercase text-amber-900">3. Traducción Campesina en Finca</span>
+                <p class="text-lg font-black mt-2">
+                  «¿Cómo aprender juntos en la finca a preparar abonos limpios, cuidar las abejas, usar el celular y sacar fibra del tallo para vivir mejor y que los jóvenes se queden en el campo?»
+                </p>
+              </div>
+            </div>
+
+            <!-- Objetivo General y Los 3 Pasos del Camino (Objetivos Específicos) -->
+            <div class="bg-white p-5 rounded-2xl border-2 border-stone-200 space-y-4">
+              <div>
+                <span class="text-xs font-black uppercase bg-emerald-100 text-emerald-900 px-3 py-1 rounded-full">
+                  Objetivo General: El Destino Común
+                </span>
+                <p class="text-base sm:text-lg font-extrabold text-stone-900 mt-2">
+                  Cocrear e integrar alternativas agro-biotecnológicas (bioinsumos, ecología microbiana), agricultura de precisión de bajo costo, conservación de abejas y valorización de fibras residuales para biocompuestos con los sistemas tradicionales alimentarios mediante metodologías participativas (IAP/ECAs) en un Hub Territorial, asegurando el «buen vivir» y el relevo generacional.
+                </p>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                <div class="bg-stone-50 p-4 rounded-xl border-2 border-stone-300">
+                  <span class="font-black text-emerald-800 text-sm">🪧 1. Explorar y Diagnosticar</span>
+                  <p class="text-sm font-bold text-stone-700 mt-1">
+                    Identificar y recuperar los saberes locales, la percepción ambiental, las zonas de pecoreo de abejas y la variabilidad de la parcela mediante <strong>Mapas Parlantes</strong> y herramientas móviles de precisión.
+                  </p>
+                </div>
+                <div class="bg-stone-50 p-4 rounded-xl border-2 border-stone-300">
+                  <span class="font-black text-amber-900 text-sm">🪧 2. Implementar y Validar en ECA</span>
+                  <p class="text-sm font-bold text-stone-700 mt-1">
+                    Ejecutar experimentación participativa en campo (<strong>Escuelas de Campo</strong>) para validar bioinsumos locales (Bokashi/Humus), corredores libres de veneno para abejas y extracción artesanal de fibras para refuerzos plásticos.
+                  </p>
+                </div>
+                <div class="bg-stone-50 p-4 rounded-xl border-2 border-stone-300">
+                  <span class="font-black text-sky-900 text-sm">🪧 3. Evaluar y Sostener (OVOP)</span>
+                  <p class="text-sm font-bold text-stone-700 mt-1">
+                    Medir la apropiación pedagógica mediante la <strong>Prueba de Caja</strong>, el balance costo-beneficio frente a agroquímicos y el fortalecimiento del relevo generacional bajo el enfoque OVOP-SENA.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Semáforo de Cuentas Claras: Delimitación de Alcances (Qué SÍ vs. Qué NO abarca) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+              <div class="bg-emerald-50 p-5 rounded-2xl border-3 border-[#2E7D32]">
+                <h4 class="text-lg font-black text-emerald-950 flex items-center gap-2 mb-3">
+                  <span>🟢</span> <span>LO QUE SÍ INCLUYE EL PROYECTO (Alcance Real)</span>
+                </h4>
+                <ul class="text-sm sm:text-base font-bold text-stone-800 space-y-2">
+                  <li>✅ <strong>Pedagogía vivencial (IAP/ECAs):</strong> Talleres prácticos, cartillas ilustradas, mapas parlantes y prueba de caja en la vereda.</li>
+                  <li>✅ <strong>Bioinsumos y Precisión Accesible:</strong> Preparación de Bokashi/Humus y mapeo de lotes con celulares sin depender de internet pago.</li>
+                  <li>✅ <strong>Abejas y Fibras a escala piloto:</strong> Franjas libres de agrotóxicos y desfibrado de tallos con pruebas mecánicas de biocompuestos en laboratorio (TRL 3-4).</li>
+                </ul>
+              </div>
+
+              <div class="bg-red-50 p-5 rounded-2xl border-3 border-red-600">
+                <h4 class="text-lg font-black text-red-950 flex items-center gap-2 mb-3">
+                  <span>🔴</span> <span>LO QUE NO PROMETEMOS (Exclusiones Explícitas)</span>
+                </h4>
+                <ul class="text-sm sm:text-base font-bold text-stone-800 space-y-2">
+                  <li>❌ <strong>No construye carreteras ni da camiones:</strong> Mitigamos el peso secando la fibra en finca, pero no hacemos obras viales.</li>
+                  <li>❌ <strong>No otorga créditos bancarios ni subsidios en efectivo:</strong> Entregamos formación y validación técnico-económica.</li>
+                  <li>❌ <strong>No instala fábricas industriales gigantes de plástico:</strong> Llegamos hasta el prototipo validado y enlace con el Hub Territorial.</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- =============================================================
+             PESTAÑA 3: RUTA METODOLÓGICA (5 MÓDULOS MACIZO + CICLO IAP DE 4 ENGRANAJES)
+             ============================================================= -->
+        <section id="panel-tab-3" class="tab-panel space-y-6">
+          
+          <!-- Ciclo IAP de 4 Engranajes (Orlando Fals Borda - La Parcela como Laboratorio Vivo) -->
+          <div class="pergamino-card rounded-3xl p-6 sm:p-8 border-2 border-amber-900/20">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+              <div>
+                <span class="bg-amber-100 text-amber-950 text-xs font-black px-3 py-1 rounded-full uppercase">
+                  Modelo de Orlando Fals Borda • Enfoque Cualitativo e Inductivo
+                </span>
+                <h2 class="serif-macizo text-2xl sm:text-3xl font-bold text-stone-900 mt-1">
+                  ⚙️ Los 4 Engranajes de la Investigación Acción Participativa (IAP)
+                </h2>
+                <p class="text-sm sm:text-base text-stone-700 font-bold">
+                  «Los significados provienen del terreno, no del escritorio». Toca cada engranaje alrededor de <strong>La Parcela como Laboratorio Vivo</strong>:
+                </p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div onclick="narrarTexto('Engranaje 1: Investigar en ambientes naturales. Reconocer en la misma finca el estado del suelo, las semillas nativas, las abejas y los residuos fibrosos.', '🔍🌿')"
+                class="cursor-pointer bg-amber-50 hover:bg-amber-100 border-3 border-amber-600 rounded-3xl p-5 text-center transition shadow">
+                <div class="text-4xl mb-2">⚙️ 1. Investigar</div>
+                <span class="text-xs font-black uppercase bg-amber-200 text-amber-950 px-2.5 py-0.5 rounded-full">En ambientes naturales</span>
+                <p class="text-sm font-bold text-stone-800 mt-2">
+                  Observación directa en la parcela junto a abuelos, mujeres y jóvenes sin alterar su entorno.
+                </p>
+              </div>
+
+              <div onclick="narrarTexto('Engranaje 2: Actuar con respuestas cocreadas. Aplicar bioinsumos, proteger franjas de abejas, zonificar con el celular y desfibrar los tallos.', '🛠️🌱')"
+                class="cursor-pointer bg-emerald-50 hover:bg-emerald-100 border-3 border-[#2E7D32] rounded-3xl p-5 text-center transition shadow">
+                <div class="text-4xl mb-2">⚙️ 2. Actuar</div>
+                <span class="text-xs font-black uppercase bg-emerald-200 text-emerald-950 px-2.5 py-0.5 rounded-full">Respuestas cocreadas</span>
+                <p class="text-sm font-bold text-stone-800 mt-2">
+                  Experimentación práctica en la Escuela de Campo (ECA): parcela bioeconómica vs. convencional.
+                </p>
+              </div>
+
+              <div onclick="narrarTexto('Engranaje 3: Reflexionar en diálogo de saberes. Analizar en círculo qué funcionó, cuánto ahorramos en venenos y cómo resistió la fibra.', '💬🌳')"
+                class="cursor-pointer bg-orange-50 hover:bg-orange-100 border-3 border-orange-600 rounded-3xl p-5 text-center transition shadow">
+                <div class="text-4xl mb-2">⚙️ 3. Reflexionar</div>
+                <span class="text-xs font-black uppercase bg-orange-200 text-orange-950 px-2.5 py-0.5 rounded-full">Diálogo de saberes</span>
+                <p class="text-sm font-bold text-stone-800 mt-2">
+                  Conversatorio horizontal bajo los árboles evaluando costos, salud del suelo y cosecha.
+                </p>
+              </div>
+
+              <div onclick="narrarTexto('Engranaje 4: Participar con significados construidos por el agricultor. La comunidad toma decisiones autónomas y lidera el Hub Territorial.', '🤝🏆')"
+                class="cursor-pointer bg-stone-100 hover:bg-stone-200 border-3 border-stone-700 rounded-3xl p-5 text-center transition shadow">
+                <div class="text-4xl mb-2">⚙️ 4. Participar</div>
+                <span class="text-xs font-black uppercase bg-stone-300 text-stone-900 px-2.5 py-0.5 rounded-full">Modelo Fals Borda</span>
+                <p class="text-sm font-bold text-stone-800 mt-2">
+                  Empoderamiento campesino como investigadores activos y relevo generacional real.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Los 5 Módulos de la Ruta Metodológica Unificada -->
+          <div class="pergamino-card rounded-3xl p-6 sm:p-8 border-2 border-emerald-900/20">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+              <div>
+                <span class="bg-emerald-100 text-emerald-900 text-xs font-black px-3 py-1 rounded-full uppercase">
+                  Ruta Metodológica en 5 Pasos (Fusión Cafeto del Macizo + Cartilla de Campo)
+                </span>
+                <h3 class="serif-macizo text-2xl sm:text-3xl font-bold text-emerald-950 mt-1">
+                  Los 5 Módulos del Camino Comunitario
+                </h3>
+              </div>
+              <button onclick="narrarTexto('Ruta metodológica en cinco pasos: Paso 1 Green Module, Acercamiento y diálogo de saberes. Paso 2 Brown Module, Diagnóstico, mapas parlantes y abejas. Paso 3 Gold Module, Sistematización con inteligencia artificial y validación comunitaria. Paso 4 Bright Green Module, Implementación del Hub Territorial, Escuelas de Campo, bioinsumos y fibras plásticas. Paso 5 Sostenibilidad, Prueba de Caja, modelo OVOP y relevo generacional.', '🧭👣')"
+                class="btn-tactil bg-emerald-800 text-white font-black px-4 py-2 rounded-xl text-sm">
+                🔊 Escuchar los 5 Módulos
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+              
+              <!-- Paso 1 -->
+              <div onclick="narrarTexto('Paso 1, Green Module: Acercamiento y Diálogo de Saberes. Relación sujeto a sujeto, encuentro de saberes ancestrales y técnicos, y enfoque IAP.', '🌿🤝')"
+                class="cursor-pointer bg-gradient-to-b from-emerald-50 to-white p-5 rounded-3xl border-2 border-emerald-700/40 shadow hover:-translate-y-1 transition flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="w-9 h-9 rounded-xl bg-emerald-700 text-white font-black flex items-center justify-center">1</span>
+                    <span class="text-[10px] font-black bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded-lg">GREEN MODULE</span>
+                  </div>
+                  <div class="text-3xl mb-2">👩‍🌾🤝👴</div>
+                  <h4 class="serif-macizo font-bold text-emerald-950 text-base">Acercamiento y Diálogo de Saberes</h4>
+                  <ul class="text-xs font-bold text-stone-700 space-y-1.5 mt-2 list-disc pl-4">
+                    <li>Relación Sujeto-Sujeto (Freire y Fals Borda).</li>
+                    <li>Encuentro de saberes ancestrales y técnicos.</li>
+                    <li>Aprender haciendo en la finca.</li>
+                  </ul>
+                </div>
+                <span class="mt-4 pt-2 border-t border-emerald-200 text-xs font-black text-emerald-800 block">🔊 Escuchar Paso 1</span>
+              </div>
+
+              <!-- Paso 2 -->
+              <div onclick="narrarTexto('Paso 2, Brown Module: Diagnóstico, Mapas Parlantes y Cartografía Social. Identificación de comida familiar, hábitats de abejas, costos químicos y residuos de fibra.', '🗺️🐝')"
+                class="cursor-pointer bg-gradient-to-b from-amber-50 to-white p-5 rounded-3xl border-2 border-amber-800/40 shadow hover:-translate-y-1 transition flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="w-9 h-9 rounded-xl bg-amber-800 text-white font-black flex items-center justify-center">2</span>
+                    <span class="text-[10px] font-black bg-amber-100 text-amber-950 px-2 py-0.5 rounded-lg">BROWN MODULE</span>
+                  </div>
+                  <div class="text-3xl mb-2">🗺️🐝🍌</div>
+                  <h4 class="serif-macizo font-bold text-amber-950 text-base">Diagnóstico y Mapas Parlantes</h4>
+                  <ul class="text-xs font-bold text-stone-700 space-y-1.5 mt-2 list-disc pl-4">
+                    <li>Croquis a lápiz, GPS y correlación satelital.</li>
+                    <li>Mapeo de abejas, agua y semillas nativas.</li>
+                    <li>Aforo de biomasa fibrosa poscosecha.</li>
+                  </ul>
+                </div>
+                <span class="mt-4 pt-2 border-t border-amber-200 text-xs font-black text-amber-900 block">🔊 Escuchar Paso 2</span>
+              </div>
+
+              <!-- Paso 3 -->
+              <div onclick="narrarTexto('Paso 3, Gold Module: Sistematización y Validación. Codificación de saberes con apoyo de MAXQDA e inteligencia artificial, devolución sistemática a la vereda y co-diseño de cartillas.', '📊✨')"
+                class="cursor-pointer bg-gradient-to-b from-yellow-50 to-white p-5 rounded-3xl border-2 border-yellow-600/40 shadow hover:-translate-y-1 transition flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="w-9 h-9 rounded-xl bg-yellow-700 text-white font-black flex items-center justify-center">3</span>
+                    <span class="text-[10px] font-black bg-yellow-100 text-yellow-950 px-2 py-0.5 rounded-lg">GOLD MODULE</span>
+                  </div>
+                  <div class="text-3xl mb-2">📓🤖🗣️</div>
+                  <h4 class="serif-macizo font-bold text-stone-900 text-base">Sistematización y Validación</h4>
+                  <ul class="text-xs font-bold text-stone-700 space-y-1.5 mt-2 list-disc pl-4">
+                    <li>Análisis de categorías emergentes (MAXQDA / IA).</li>
+                    <li>Validación comunitaria sin tecnicismos.</li>
+                    <li>Cosecha de Cartillas Vivas y calendarios.</li>
+                  </ul>
+                </div>
+                <span class="mt-4 pt-2 border-t border-yellow-200 text-xs font-black text-yellow-900 block">🔊 Escuchar Paso 3</span>
+              </div>
+
+              <!-- Paso 4 -->
+              <div onclick="narrarTexto('Paso 4, Bright Green Module: Implementación Comunitaria. Co-creación del Hub Territorial, Escuelas de Campo, aplicación de bioinsumos Bokashi y extracción de fibras para refuerzo de bioplásticos.', '🏡🪢')"
+                class="cursor-pointer bg-gradient-to-b from-emerald-100/80 to-white p-5 rounded-3xl border-2 border-emerald-900/40 shadow hover:-translate-y-1 transition flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="w-9 h-9 rounded-xl bg-emerald-900 text-white font-black flex items-center justify-center">4</span>
+                    <span class="text-[10px] font-black bg-emerald-200 text-emerald-950 px-2 py-0.5 rounded-lg">BRIGHT GREEN</span>
+                  </div>
+                  <div class="text-3xl mb-2">🏡🧪🪢</div>
+                  <h4 class="serif-macizo font-bold text-emerald-950 text-base">Implementación Hub y ECAs</h4>
+                  <ul class="text-xs font-bold text-stone-700 space-y-1.5 mt-2 list-disc pl-4">
+                    <li>Co-creación del Hub Territorial.</li>
+                    <li>Bioinsumos locales + Zonas de abejas.</li>
+                    <li>Desfibrado y probetas de bioplástico fuerte.</li>
+                  </ul>
+                </div>
+                <span class="mt-4 pt-2 border-t border-emerald-300 text-xs font-black text-emerald-950 block">🔊 Escuchar Paso 4</span>
+              </div>
+
+              <!-- Paso 5 -->
+              <div onclick="narrarTexto('Paso 5, Sostenibilidad: Evaluación mediante Prueba de Caja, validación económica costo beneficio, modelo de negocio OVOP SENA y relevo generacional.', '📦🏆')"
+                class="cursor-pointer bg-gradient-to-b from-amber-100/80 to-white p-5 rounded-3xl border-2 border-amber-900/40 shadow hover:-translate-y-1 transition flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="w-9 h-9 rounded-xl bg-amber-900 text-white font-black flex items-center justify-center">5</span>
+                    <span class="text-[10px] font-black bg-amber-200 text-amber-950 px-2 py-0.5 rounded-lg">SOSTENIBILIDAD</span>
+                  </div>
+                  <div class="text-3xl mb-2">📦⚖️👨‍👩‍👧‍👦</div>
+                  <h4 class="serif-macizo font-bold text-amber-950 text-base">Evaluación, OVOP y Relevo</h4>
+                  <ul class="text-xs font-bold text-stone-700 space-y-1.5 mt-2 list-disc pl-4">
+                    <li>Prueba de Caja (impacto pre y post).</li>
+                    <li>Reducción de hasta 50% en agrotóxicos.</li>
+                    <li>Modelo OVOP-SENA y arraigo juvenil.</li>
+                  </ul>
+                </div>
+                <span class="mt-4 pt-2 border-t border-amber-300 text-xs font-black text-amber-950 block">🔊 Escuchar Paso 5</span>
+              </div>
+
+            </div>
+          </div>
+
+        </section>
+
+        <!-- =============================================================
+             PESTAÑA 4: HERRAMIENTA I — MAPAS PARLANTES, DIBUJO A LÁPIZ, GPS Y CORRELACIÓN SATELITAL
+             ============================================================= -->
+        <section id="panel-tab-4" class="tab-panel space-y-6">
+          <div class="pergamino-card rounded-3xl p-6 sm:p-8 border-2 border-emerald-900/20">
+            
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-5 border-b-2 border-stone-200">
+              <div>
+                <span class="bg-emerald-100 text-emerald-900 text-xs font-black px-3 py-1 rounded-full uppercase">
+                  Herramienta I (Fusión: Mapas Parlantes + Croquis a Lápiz + GPS + Vista Satelital)
+                </span>
+                <h2 class="serif-macizo text-2xl sm:text-3xl font-bold text-emerald-950 mt-1">
+                  🗺️ Laboratorio de Mapas Parlantes y Cartografía Social
+                </h2>
+                <p class="text-sm sm:text-base text-stone-700 font-bold">
+                  Recuperamos la percepción cultural y geográfica antes de proponer tecnología: dibuja a lápiz, estampa sellos del campo, alterna con satélite o ubica tu GPS.
+                </p>
+              </div>
+              <button onclick="narrarTexto('Herramienta uno: Mapas Parlantes y Cartografía Social. Puedes rayar con lápices de colores sobre el mapa, poner sellos de abejas, semillas o casa, cambiar a vista satelital y marcar tu ubicación G P S real.', '🗺️✏️')"
+                class="btn-tactil bg-[#FBC02D] text-stone-950 font-black px-4 py-2 rounded-xl text-sm border-2 border-stone-900 shrink-0">
+                🔊 Explicar Mapa Parlante
+              </button>
+            </div>
+
+            <!-- 3 Pósits Diagnósticos de los Mapas Parlantes (Del PPTX de Hugo Semanate) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-5">
+              <div onclick="narrarTexto('Pósit amarillo del Mapa Parlante: Identificación de zonas de alto costo de insumos químicos para sustituirlos por bioinsumos y proteger a las abejas.', '🟨🧪')"
+                class="cursor-pointer bg-yellow-100 border-2 border-yellow-500 rounded-2xl p-4 shadow-sm flex items-center gap-3">
+                <span class="text-3xl">📌🟨</span>
+                <div>
+                  <h4 class="font-black text-stone-900 text-sm sm:text-base">Zonas de Alto Costo Químico</h4>
+                  <p class="text-xs sm:text-sm font-bold text-stone-700">Lotes donde el gasto en plaguicidas asfixia la economía familiar y daña polinizadores.</p>
+                </div>
+              </div>
+
+              <div onclick="narrarTexto('Pósit azul del Mapa Parlante: Fuentes hídricas, nacederos y percepción local de la salud y microbiología del suelo.', '🟦💧')"
+                class="cursor-pointer bg-sky-100 border-2 border-sky-500 rounded-2xl p-4 shadow-sm flex items-center gap-3">
+                <span class="text-3xl">📌🟦</span>
+                <div>
+                  <h4 class="font-black text-stone-900 text-sm sm:text-base">Fuentes Hídricas y Suelo Vivo</h4>
+                  <p class="text-xs sm:text-sm font-bold text-stone-700">Quebradas, bosques protectores y tierras fértiles reconocidas por la comunidad.</p>
+                </div>
+              </div>
+
+              <div onclick="narrarTexto('Pósit rosado del Mapa Parlante: Roles de la mujer rural y sabedores en la conservación de semillas nativas y soberanía alimentaria.', '🟥🌱')"
+                class="cursor-pointer bg-rose-100 border-2 border-rose-400 rounded-2xl p-4 shadow-sm flex items-center gap-3">
+                <span class="text-3xl">📌🟥</span>
+                <div>
+                  <h4 class="font-black text-stone-900 text-sm sm:text-base">Mujer Rural y Semillas Nativas</h4>
+                  <p class="text-xs sm:text-sm font-bold text-stone-700">Huertas de custodia genética, plantas medicinales y bienestar alimentario familiar.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel Maestro del Mapa: Controles Izquierda (4 cols) + Lienzo/Satélite Derecha (8 cols) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-4">
+              
+              <!-- Controles de Capas, Lápices, Sellos y Subida de Mapa Artesanal -->
+              <div class="lg:col-span-4 space-y-4">
+                
+                <!-- 1. Cambiar Fondo del Mapa -->
+                <div class="bg-stone-100 p-4 rounded-2xl border-2 border-stone-300 space-y-2.5">
+                  <h3 class="font-black text-stone-900 text-sm uppercase">1. Elegir Capa de Fondo:</h3>
+                  <div class="grid grid-cols-3 gap-2">
+                    <button onclick="cambiarFondoMapa('LIENZO')" id="btn-capa-lienzo"
+                      class="bg-emerald-800 text-white font-black py-2 px-2 rounded-xl text-xs shadow">
+                      📄 Papel Blanco
+                    </button>
+                    <button onclick="cambiarFondoMapa('PARLANTE')" id="btn-capa-parlante"
+                      class="bg-white text-stone-800 border border-stone-400 font-black py-2 px-2 rounded-xl text-xs">
+                      🎨 Mapa Parlante
+                    </button>
+                    <button onclick="cambiarFondoMapa('SATELITE')" id="btn-capa-satelite"
+                      class="bg-white text-stone-800 border border-stone-400 font-black py-2 px-2 rounded-xl text-xs">
+                      🛰️ Satélite
+                    </button>
+                  </div>
+                  <div class="pt-1">
+                    <label class="block text-xs font-extrabold text-stone-700 mb-1">O sube foto del mapa en papel de tu vereda:</label>
+                    <input type="file" accept="image/*" onchange="cargarFotoMapaArtesanal(this)"
+                      class="w-full text-xs file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:font-black file:bg-amber-400 file:text-stone-950 cursor-pointer" />
+                  </div>
+                </div>
+
+                <!-- 2. Lápices de Colores para Rayar con el Dedo -->
+                <div class="bg-amber-50/90 p-4 rounded-2xl border-2 border-amber-400 space-y-2.5">
+                  <h3 class="font-black text-stone-900 text-sm uppercase">2. Lápices para Dibujar a Mano:</h3>
+                  <div class="grid grid-cols-3 gap-2">
+                    <button onclick="activarLapiz('#1C1917', 5, 'Lápiz Negro: Linderos y Cercas')"
+                      class="bg-stone-900 text-white font-black py-2 rounded-xl text-xs">✏️ Linderos</button>
+                    <button onclick="activarLapiz('#15803D', 9, 'Lápiz Verde: Cultivo y Comida')"
+                      class="bg-emerald-700 text-white font-black py-2 rounded-xl text-xs">🌿 Cultivo</button>
+                    <button onclick="activarLapiz('#0284C7', 10, 'Lápiz Azul: Quebrada y Agua')"
+                      class="bg-sky-600 text-white font-black py-2 rounded-xl text-xs">💧 Agua</button>
+                    <button onclick="activarLapiz('#EAB308', 12, 'Lápiz Amarillo: Corredor de Abejas')"
+                      class="bg-amber-400 text-stone-950 font-black py-2 rounded-xl text-xs">🐝 Abejas</button>
+                    <button onclick="activarLapiz('#DC2626', 10, 'Lápiz Rojo: Zona de Riesgo o Alto Costo Químico')"
+                      class="bg-red-600 text-white font-black py-2 rounded-xl text-xs">⚠️ Químicos</button>
+                    <button onclick="limpiarTrazosMapa()"
+                      class="bg-white text-red-800 border-2 border-red-400 font-black py-2 rounded-xl text-xs">🧽 Limpiar</button>
+                  </div>
+                </div>
+
+                <!-- 3. Sellos Gigantes del Campo -->
+                <div class="bg-emerald-50/90 p-4 rounded-2xl border-2 border-emerald-400 space-y-2.5">
+                  <h3 class="font-black text-stone-900 text-sm uppercase">3. Sellos Gigantes (Toca y Estampa):</h3>
+                  <div class="grid grid-cols-3 gap-2">
+                    <button onclick="activarSello('🏡', 'Finca / Casa')" class="bg-white border border-stone-300 rounded-xl p-2 text-center hover:bg-amber-100">
+                      <span class="text-2xl block">🏡</span><span class="text-xs font-black">Casa</span>
+                    </button>
+                    <button onclick="activarSello('🐝', 'Apiario / Abejas')" class="bg-white border border-stone-300 rounded-xl p-2 text-center hover:bg-amber-100">
+                      <span class="text-2xl block">🐝</span><span class="text-xs font-black">Abejas</span>
+                    </button>
+                    <button onclick="activarSello('🌾', 'Custodia Semillas')" class="bg-white border border-stone-300 rounded-xl p-2 text-center hover:bg-amber-100">
+                      <span class="text-2xl block">🌾</span><span class="text-xs font-black">Semillas</span>
+                    </button>
+                    <button onclick="activarSello('🪢', 'Mesa de Fibra')" class="bg-white border border-stone-300 rounded-xl p-2 text-center hover:bg-amber-100">
+                      <span class="text-2xl block">🪢</span><span class="text-xs font-black">Fibra</span>
+                    </button>
+                    <button onclick="activarSello('🧪', 'Biofábrica Bokashi')" class="bg-white border border-stone-300 rounded-xl p-2 text-center hover:bg-amber-100">
+                      <span class="text-2xl block">🧪</span><span class="text-xs font-black">Bioinsumo</span>
+                    </button>
+                    <button onclick="activarSello('🚫', 'No Fumigar')" class="bg-white border border-stone-300 rounded-xl p-2 text-center hover:bg-amber-100">
+                      <span class="text-2xl block">🚫</span><span class="text-xs font-black">Sin Veneno</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- 4. Botones de Ubicación GPS y Guardado en Bitácora -->
+                <div class="space-y-2">
+                  <button onclick="ubicarGPSRealEnMapa()"
+                    class="btn-tactil w-full bg-sky-700 hover:bg-sky-800 text-white font-black py-3 px-4 rounded-2xl text-sm flex items-center justify-center gap-2 border-2 border-stone-900">
+                    <span>📡📍</span> <span>Estampar Mi Ubicación GPS en el Mapa</span>
+                  </button>
+                  <button onclick="guardarMapaEnBitacora()"
+                    class="btn-tactil w-full bg-[#2E7D32] hover:bg-emerald-800 text-white font-black py-3 px-4 rounded-2xl text-sm flex items-center justify-center gap-2 border-2 border-stone-900">
+                    <span>💾📂</span> <span>Guardar Mapa en Bitácora de Archivos</span>
+                  </button>
+                </div>
+
+              </div>
+
+              <!-- Lienzo Interactivo del Mapa Parlante y Satelital -->
+              <div class="lg:col-span-8 flex flex-col space-y-3">
+                <div id="barra-herramienta-mapa" class="bg-emerald-950 text-amber-200 font-black text-sm px-4 py-2.5 rounded-2xl flex items-center justify-between">
+                  <span id="txt-herramienta-mapa">✏️ Activo: Lápiz Negro (Dibuja con tu dedo o ratón sobre el mapa)</span>
+                  <span id="txt-gps-actual" class="text-xs bg-emerald-800 text-white px-2.5 py-1 rounded-lg">GPS: Listo</span>
+                </div>
+
+                <div class="relative w-full rounded-3xl overflow-hidden border-4 border-stone-900 shadow-2xl bg-white">
+                  <canvas id="canvas-dibujo-mapa" width="900" height="520" class="w-full h-[360px] sm:h-[460px] block"></canvas>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- =============================================================
+             PESTAÑA 5: HERRAMIENTA II — LABORATORIO VIVO ECA (PARCELA MIC, ABEJAS Y BIOPLÁSTICO)
+             ============================================================= -->
+        <section id="panel-tab-5" class="tab-panel space-y-6">
+          
+          <!-- Comparador y Simulador de Escuelas de Campo (ECA): Parcela Convencional vs. Parcela MIC/Bioeconomía -->
+          <div class="pergamino-card rounded-3xl p-6 sm:p-8 border-2 border-emerald-900/20">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-5 border-b-2 border-stone-200">
+              <div>
+                <span class="bg-emerald-100 text-emerald-900 text-xs font-black px-3 py-1 rounded-full uppercase">
+                  Herramienta II: Escuelas de Campo de Agricultores (ECA) • Análisis del Agroecosistema (AAE)
+                </span>
+                <h2 class="serif-macizo text-2xl sm:text-3xl font-bold text-emerald-950 mt-1">
+                  🌱 Laboratorio Vivo ECA: Parcela Convencional vs. Parcela Bioeconómica (MIC)
+                </h2>
+                <p class="text-sm sm:text-base text-stone-700 font-bold">
+                  Elige una práctica agroambiental abajo y toca los 6 surcos de la parcela para transformarla mediante observación directa:
+                </p>
+              </div>
+              <button onclick="narrarTexto('Herramienta dos: Escuelas de Campo de Agricultores. Aquí comparamos la parcela convencional contra la parcela de Manejo Integrado y Bioeconomía. Elige una herramienta abajo y toca los cuadros de tierra.', '🐝🌱')"
+                class="btn-tactil bg-[#FBC02D] text-stone-950 font-black px-4 py-2 rounded-xl text-sm border-2 border-stone-900 shrink-0">
+                🔊 Escuchar Guía ECA
+              </button>
+            </div>
+
+            <!-- Selector de las 3 Herramientas del Laboratorio ECA -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-5">
+              <button onclick="seleccionarAccionECA('BOKASHI')" id="btn-eca-bokashi"
+                class="btn-tactil bg-emerald-700 text-white border-3 border-stone-900 rounded-2xl p-4 text-left flex items-center gap-3 shadow-lg">
+                <span class="text-4xl">🪱🧪</span>
+                <div>
+                  <div class="font-black text-base">1. Aplicar Bioinsumos Locales</div>
+                  <div class="text-xs opacity-90 font-bold">Humus de lombriz, Bokashi y ecología microbiana.</div>
+                </div>
+              </button>
+
+              <button onclick="seleccionarAccionECA('ABEJAS')" id="btn-eca-abejas"
+                class="btn-tactil bg-white text-stone-900 border-3 border-stone-300 rounded-2xl p-4 text-left flex items-center gap-3">
+                <span class="text-4xl">🐝🌻</span>
+                <div>
+                  <div class="font-black text-base">2. Corredor de Abejas (Sin Veneno)</div>
+                  <div class="text-xs text-stone-600 font-bold">Franja floral libre de plaguicidas para polinización.</div>
+                </div>
+              </button>
+
+              <button onclick="seleccionarAccionECA('PRECISION')" id="btn-eca-precision"
+                class="btn-tactil bg-white text-stone-900 border-3 border-stone-300 rounded-2xl p-4 text-left flex items-center gap-3">
+                <span class="text-4xl">📱🍌</span>
+                <div>
+                  <div class="font-black text-base">3. Precisión y Cosecha Dual</div>
+                  <div class="text-xs text-stone-600 font-bold">Alimento familiar + tallo listo para desfibrar.</div>
+                </div>
+              </button>
+            </div>
+
+            <!-- Estado del Análisis del Agroecosistema (AAE) -->
+            <div id="banner-estado-eca" class="bg-emerald-950 text-amber-200 font-black text-base p-4 rounded-2xl text-center mb-5">
+              👆 Toca cualquiera de los 6 lotes abajo para convertirlos del manejo químico convencional al Manejo Integrado (MIC):
+            </div>
+
+            <!-- Cuadrícula de los 6 Lotes de la Parcela ECA -->
+            <div id="grid-lotes-eca" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <!-- Se genera con JS -->
+            </div>
+          </div>
+
+          <!-- Simulador Mecánico: De Tallo Agrícola a Refuerzo de Productos Plásticos -->
+          <div class="pergamino-card rounded-3xl p-6 sm:p-8 border-2 border-[#5D4037]">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
+              <div>
+                <span class="bg-[#5D4037] text-white text-xs font-black px-3 py-1 rounded-full uppercase">
+                  Bioeconomía Circular Aplicada • Valorización de Residuos Agrícolas
+                </span>
+                <h3 class="serif-macizo text-2xl sm:text-3xl font-bold text-stone-900 mt-1">
+                  🪢 Probador de Resistencia: Fibras Naturales en Refuerzo de Plásticos
+                </h3>
+                <p class="text-sm sm:text-base text-stone-700 font-bold">
+                  Comprueba cómo los hilos lignocelulósicos extraídos del tallo poscosecha multiplican la resistencia del polímero:
+                </p>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button onclick="probarCargaBioplastico(1)" class="btn-tactil bg-white border-2 border-stone-400 font-black px-4 py-2 rounded-xl text-sm">📦 1 Bulto</button>
+                <button onclick="probarCargaBioplastico(2)" class="btn-tactil bg-white border-2 border-stone-400 font-black px-4 py-2 rounded-xl text-sm">📦📦 2 Bultos</button>
+                <button onclick="probarCargaBioplastico(3)" class="btn-tactil bg-[#FBC02D] border-2 border-stone-900 font-black px-4 py-2 rounded-xl text-sm">📦📦📦 ¡3 Bultos Pesados!</button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="bg-red-50 rounded-2xl p-5 border-2 border-red-300 text-center">
+                <h4 class="font-black text-red-900 text-lg">Matriz Plástica Sin Refuerzo (Convencional)</h4>
+                <div id="vista-plastico-simple" class="h-32 flex flex-col items-center justify-center my-3"></div>
+                <p id="lbl-plastico-simple" class="text-sm sm:text-base font-extrabold text-stone-700"></p>
+              </div>
+
+              <div class="bg-emerald-50 rounded-2xl p-5 border-2 border-[#2E7D32] text-center">
+                <h4 class="font-black text-emerald-950 text-lg">Biocompuesto Reforzado con Fibra Natural de la Finca</h4>
+                <div id="vista-plastico-reforzado" class="h-32 flex flex-col items-center justify-center my-3"></div>
+                <p id="lbl-plastico-reforzado" class="text-sm sm:text-base font-extrabold text-emerald-900"></p>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- =============================================================
+             PESTAÑA 6: HERRAMIENTA III — PRUEBA DE CAJA Y VALIDACIÓN ECONÓMICA COSTO-BENEFICIO
+             ============================================================= -->
+        <section id="panel-tab-6" class="tab-panel space-y-6">
+          
+          <!-- 1. Simulador Interactivo de la "Prueba de Caja" (Evaluación Participativa Pre y Post Intervención) -->
+          <div class="pergamino-card rounded-3xl p-6 sm:p-8 border-2 border-amber-900/30">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-5 border-b-2 border-stone-200">
+              <div>
+                <span class="bg-amber-200 text-amber-950 text-xs font-black px-3 py-1 rounded-full uppercase">
+                  Herramienta III (Aporte Metodológico ECA): Evaluación Participativa y Anónima
+                </span>
+                <h2 class="serif-macizo text-2xl sm:text-3xl font-bold text-stone-900 mt-1">
+                  🗳️ Simulador de la «Prueba de Caja» (Impacto de Aprendizaje en Campo)
+                </h2>
+                <p class="text-sm sm:text-base text-stone-700 font-bold">
+                  En las Escuelas de Campo no hacemos exámenes escritos intimidantes: cada campesino deposita su papeleta en la <strong>Caja 1, Caja 2 o Caja 3</strong> frente a una pregunta práctica del cultivo. ¡Deposita tu voto!
+                </p>
+              </div>
+              <button onclick="narrarTexto('Herramienta tres: La Prueba de Caja. Sirve para medir cuánto aprendimos antes y después de la Escuela de Campo de forma participativa, anónima y sin exámenes escritos. Lee o escucha la pregunta y toca una de las tres cajas de madera.', '🗳️📦')"
+                class="btn-tactil bg-[#FBC02D] text-stone-950 font-black px-4 py-2 rounded-xl text-sm border-2 border-stone-900 shrink-0">
+                🔊 ¿Qué es la Prueba de Caja?
+              </button>
+            </div>
+
+            <!-- Pregunta Activa de la Prueba de Caja -->
+            <div class="bg-stone-900 text-white rounded-2xl p-5 my-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div>
+                <span id="badge-pregunta-caja" class="text-xs font-black uppercase text-amber-300">
+                  Pregunta de Campo 1 de 3:
+                </span>
+                <h3 id="titulo-pregunta-caja" class="text-lg sm:text-2xl font-black mt-1">
+                  ¿Qué debemos hacer con las flores en los bordes del lote y los tallos que sobran tras la cosecha?
+                </h3>
+              </div>
+              <button onclick="siguientePreguntaCaja()"
+                class="btn-tactil bg-emerald-700 hover:bg-emerald-600 text-white font-black px-4 py-2 rounded-xl text-xs sm:text-sm shrink-0 border border-emerald-400">
+                🔄 Cambiar Pregunta
+              </button>
+            </div>
+
+            <!-- Las 3 Cajas de Madera para Depositar la Papeleta -->
+            <div id="contenedor-tres-cajas" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <!-- Se llena con JS -->
+            </div>
+
+            <div id="resultado-prueba-caja" class="hidden mt-5 p-4 rounded-2xl bg-emerald-100 border-2 border-emerald-600 text-emerald-950 font-black text-center text-base sm:text-lg"></div>
+          </div>
+
+          <!-- 2. Calculadora de Validación Económica Costo-Beneficio (Resultados Cuantitativos y Cualitativos) -->
+          <div class="pergamino-card rounded-3xl p-6 sm:p-8 border-2 border-emerald-900/30">
+            <span class="bg-emerald-100 text-emerald-900 text-xs font-black px-3 py-1 rounded-full uppercase">
+              Validación Económica y Productiva • Transición de Insumos y Valor Agregado
+            </span>
+            <h3 class="serif-macizo text-2xl sm:text-3xl font-bold text-emerald-950 mt-1">
+              ⚖️ Calculadora de Costo-Beneficio en la Finca (Agroquímicos vs. Bioeconomía Circular)
+            </h3>
+            <p class="text-sm sm:text-base text-stone-700 font-bold mt-1">
+              Mueve el control para proyectar el ahorro de hasta un <strong>50% en plaguicidas tóxicos</strong> mediante bioinsumos (Bokashi/Humus), polinización de abejas y venta de fibra natural:
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6 items-center">
+              
+              <!-- Controles Deslizantes -->
+              <div class="lg:col-span-5 bg-stone-50 p-5 rounded-2xl border-2 border-stone-300 space-y-5">
+                <div>
+                  <label for="slider-gasto-quimico" class="block text-sm font-black text-stone-800">
+                    1. Gasto actual en agroquímicos por cosecha (COP):
+                  </label>
+                  <input id="slider-gasto-quimico" type="range" min="400000" max="4000000" step="100000" value="1600000"
+                    oninput="actualizarCalculadoraEconomica()" class="w-full accent-emerald-700 mt-2 h-3 cursor-pointer" />
+                  <div id="lbl-gasto-quimico" class="text-xl font-black text-red-700 mt-1">$1.600.000 COP</div>
+                </div>
+
+                <div>
+                  <label for="slider-adopcion-bio" class="block text-sm font-black text-stone-800">
+                    2. Nivel de transición a Bioinsumos (Bokashi/Humus) y Precisión:
+                  </label>
+                  <input id="slider-adopcion-bio" type="range" min="10" max="50" step="5" value="50"
+                    oninput="actualizarCalculadoraEconomica()" class="w-full accent-amber-500 mt-2 h-3 cursor-pointer" />
+                  <div id="lbl-adopcion-bio" class="text-xl font-black text-emerald-800 mt-1">50% de reducción en tóxicos (Meta del estudio)</div>
+                </div>
+
+                <div>
+                  <label for="slider-tallos-fibra" class="block text-sm font-black text-stone-800">
+                    3. Kilos de fibra seca extraída de tallos residuales en finca:
+                  </label>
+                  <input id="slider-tallos-fibra" type="range" min="0" max="500" step="25" value="200"
+                    oninput="actualizarCalculadoraEconomica()" class="w-full accent-sky-700 mt-2 h-3 cursor-pointer" />
+                  <div id="lbl-tallos-fibra" class="text-xl font-black text-sky-900 mt-1">200 kg de fibra natural</div>
+                </div>
+              </div>
+
+              <!--Los 4 Indicadores Visuales de Resultados Esperados (Del PPTX de Hugo Semanate) -->
+              <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                
+                <div class="bg-emerald-50 p-4 rounded-2xl border-2 border-emerald-500">
+                  <span class="text-xs font-black uppercase text-emerald-900">🌱 1. Reducción de Costos Químicos</span>
+                  <div id="res-ahorro-pesos" class="text-2xl sm:text-3xl font-black text-emerald-800 mt-1">$800.000 COP</div>
+                  <p class="text-xs font-bold text-stone-700 mt-1">Dinero que se queda en el bolsillo de la familia campesina al reducir plaguicidas.</p>
+                </div>
+
+                <div class="bg-amber-50 p-4 rounded-2xl border-2 border-amber-500">
+                  <span class="text-xs font-black uppercase text-amber-950">🪢 2. Ingreso Extra por Fibra Natural</span>
+                  <div id="res-ingreso-fibra" class="text-2xl sm:text-3xl font-black text-amber-900 mt-1">+$700.000 COP</div>
+                  <p class="text-xs font-bold text-stone-700 mt-1">Valorización de la biomasa residual para refuerzo de biocompuestos plásticos.</p>
+                </div>
+
+                <div class="bg-sky-50 p-4 rounded-2xl border-2 border-sky-500">
+                  <span class="text-xs font-black uppercase text-sky-950">🐝 3. Rendimiento (+t/ha) y Polinización</span>
+                  <div class="text-xl sm:text-2xl font-black text-sky-900 mt-1">+15% a +25% Cuaje Floral</div>
+                  <p class="text-xs font-bold text-stone-700 mt-1">Mantenimiento e incremento de toneladas por hectárea con suelo vivo y abejas activas.</p>
+                </div>
+
+                <div class="bg-stone-900 text-white p-4 rounded-2xl border-2 border-[#FBC02D]">
+                  <span class="text-xs font-black uppercase text-amber-300">🏆 4. Beneficio Total Familiar por Ciclo</span>
+                  <div id="res-beneficio-total" class="text-2xl sm:text-3xl font-black text-[#FBC02D] mt-1">+$1.500.000 COP</div>
+                  <p class="text-xs font-bold text-stone-300 mt-1">Suma del ahorro en insumos + fibra + inserción en mercados de producción limpia.</p>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+        </section>
+
+        <!-- =============================================================
+             PESTAÑA 7: SALA DE VIDEOCONFERENCIA, TRANSCRIPCIÓN IA, TABLERO MUDO Y BITÁCORA DE ARCHIVOS
+             ============================================================= -->
+        <section id="panel-tab-7" class="tab-panel space-y-6">
+          
+          <!-- 1. Sala de Videoconferencia, Transcripción Speech-to-Text y Chat Comunitario -->
+          <div class="pergamino-card rounded-3xl p-6 sm:p-8 border-2 border-emerald-900/20">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-5 border-b-2 border-stone-200">
+              <div>
+                <span class="bg-sky-100 text-sky-900 text-xs font-black px-3 py-1 rounded-full uppercase">
+                  Encuentro Sincrónico del Hub Territorial • Inclusión Visual y Auditiva
+                </span>
+                <h2 class="serif-macizo text-2xl sm:text-3xl font-bold text-emerald-950 mt-1">
+                  📹 Videoconferencia en Vivo, Transcripción IA y Chat Comunitario
+                </h2>
+              </div>
+              <button onclick="abrirModalComunicadorMudo()"
+                class="btn-tactil bg-sky-400 text-stone-950 font-black px-4 py-2 rounded-xl text-sm border-2 border-stone-900 flex items-center gap-2">
+                <span>👐🗣️</span> <span>Abrir Tablero Gigante para Personas Mudas</span>
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-5">
+              
+              <!-- Visor de Cámara y Controles (7 cols) -->
+              <div class="lg:col-span-7 space-y-4">
+                <div class="relative bg-stone-950 rounded-3xl overflow-hidden aspect-video border-4 border-emerald-900/40 flex items-center justify-center shadow-xl">
+                  <video id="video-conferencia" autoplay playsinline muted class="w-full h-full object-cover hidden"></video>
+                  <canvas id="canvas-video-simulado" width="640" height="360" class="w-full h-full object-cover hidden"></canvas>
+
+                  <div id="placeholder-video" class="text-center p-6 text-stone-200 space-y-2">
+                    <div class="text-5xl">📹👩‍🌾🐝🪢</div>
+                    <h3 class="serif-macizo text-xl font-bold text-white">Cámara y Micrófono Listos</h3>
+                    <p class="text-xs sm:text-sm text-stone-400 max-w-md mx-auto">
+                      Inicia la cámara para mostrar el cultivo, las abejas o el desfibrado, o usa el modo demostrativo de finca.
+                    </p>
+                  </div>
+
+                  <!-- Subtítulo superpuesto en cámara para personas mudas o sordas -->
+                  <div id="subtitulo-camara-vivo" class="hidden absolute bottom-3 left-3 right-3 bg-black/85 text-[#FBC02D] border-2 border-[#FBC02D] rounded-2xl p-2.5 text-center font-black text-base shadow-lg">
+                    🗣️ Transcripción / Seña activa
+                  </div>
+                </div>
+
+                <!-- Botones de Control de Cámara -->
+                <div class="flex flex-wrap justify-center gap-2.5">
+                  <button onclick="iniciarSalaConferencia()"
+                    class="btn-tactil bg-emerald-700 hover:bg-emerald-800 text-white font-black px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-1.5">
+                    <span>📹</span> <span>Prender Cámara y Transcripción</span>
+                  </button>
+                  <button onclick="activarModoVideoFinca()"
+                    class="btn-tactil bg-sky-700 hover:bg-sky-800 text-white font-black px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-1.5">
+                    <span>🏞️</span> <span>Simular Video de Finca</span>
+                  </button>
+                  <button onclick="capturarFotoParaBitacora()"
+                    class="btn-tactil bg-[#FBC02D] hover:bg-amber-400 text-stone-950 font-black px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-1.5 border border-stone-900">
+                    <span>📸</span> <span>Tomar Foto a Bitácora</span>
+                  </button>
+                  <button onclick="apagarSalaConferencia()"
+                    class="btn-tactil bg-red-600 hover:bg-red-700 text-white font-black px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-1.5">
+                    <span>⏹️</span> <span>Apagar</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Transcripción Inteligente Speech-to-Text + Chat Comunitario (5 cols) -->
+              <div class="lg:col-span-5 flex flex-col space-y-4">
+                
+                <!-- Caja de Transcripción Automática -->
+                <div class="bg-emerald-50/80 border-2 border-emerald-800/20 rounded-2xl p-4 h-40 flex flex-col">
+                  <div class="flex justify-between items-center pb-1.5 mb-2 border-b border-emerald-900/15">
+                    <span class="font-black text-emerald-950 text-xs uppercase">🎙️ Transcripción Automática (Voz a Texto)</span>
+                    <span class="text-[10px] bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded font-black">IA Speech-to-Text</span>
+                  </div>
+                  <div id="caja-transcripcion-ia" class="flex-grow overflow-y-auto text-xs sm:text-sm font-bold text-stone-700 space-y-1">
+                    <p class="italic text-stone-500">Al hablar por el micrófono o usar el tablero mudo, el texto aparecerá aquí...</p>
+                  </div>
+                </div>
+
+                <!-- Chat Comunitario con Respuesta del Avatar -->
+                <div class="bg-white border-2 border-stone-300 rounded-2xl p-4 h-56 flex flex-col">
+                  <div class="flex justify-between items-center pb-1.5 mb-2 border-b border-stone-200">
+                    <span class="font-black text-stone-800 text-xs uppercase">💬 Chat de Sabedores y Jóvenes</span>
+                    <span class="text-[10px] bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-black">Hub Activo</span>
+                  </div>
+                  <div id="lista-mensajes-chat" class="flex-grow overflow-y-auto text-xs sm:text-sm space-y-2 pr-1 mb-2">
+                    <div class="bg-stone-100 p-2.5 rounded-xl font-bold text-stone-800">
+                      <span class="text-emerald-900 font-black block text-xs">Don Santiago (Líder del Macizo):</span>
+                      ¡Bienvenidos compañeros! Compartan aquí sus observaciones de la parcela, las abejas o el desfibrado.
+                    </div>
+                  </div>
+                  <div class="flex gap-2">
+                    <input id="input-chat-comunitario" type="text" placeholder="Escribe un aporte o pregunta..."
+                      onkeypress="if(event.key==='Enter') enviarMensajeChat()"
+                      class="flex-grow bg-stone-50 border-2 border-stone-300 rounded-xl px-3 py-1.5 text-sm font-bold focus:outline-none focus:border-emerald-700" />
+                    <button onclick="enviarMensajeChat()"
+                      class="bg-emerald-800 hover:bg-emerald-900 text-white font-black px-4 py-1.5 rounded-xl text-xs sm:text-sm">
+                      Enviar
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+          <!-- 2. Centro de Carga y Bitácora Multimedia (PDF, JPEG, MP4, Audios, Excel, KML) -->
+          <div class="pergamino-card rounded-3xl p-6 sm:p-8 border-2 border-[#5D4037]">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
+              <div>
+                <span class="bg-[#5D4037] text-white text-xs font-black px-3 py-1 rounded-full uppercase">
+                  Repositorio Comunitario Multiformato
+                </span>
+                <h3 class="serif-macizo text-2xl sm:text-3xl font-bold text-stone-900 mt-1">
+                  📂 Bitácora Viva: Subir PDF, Fotos (JPEG), Videos (MP4), Audios y Mapas
+                </h3>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center mb-6">
+              <div class="lg:col-span-5 space-y-3">
+                <div class="bg-stone-50 p-3.5 rounded-2xl border border-stone-300">
+                  <label for="select-modulo-archivo" class="block text-xs font-black uppercase text-stone-700 mb-1">
+                    1. Asociar a un Módulo de la Ruta Metodológica:
+                  </label>
+                  <select id="select-modulo-archivo" class="w-full bg-white border-2 border-emerald-700 rounded-xl p-2.5 text-sm font-black">
+                    <option value="Módulo 1 (Green): Diálogo de Saberes e IAP">🌿 Módulo 1: Diálogo de Saberes e IAP</option>
+                    <option value="Módulo 2 (Brown): Mapas Parlantes y Diagnóstico">🗺️ Módulo 2: Mapas Parlantes y Diagnóstico</option>
+                    <option value="Módulo 3 (Gold): Sistematización y Cartillas">📓 Módulo 3: Sistematización y Cartillas</option>
+                    <option value="Módulo 4 (Bright Green): ECAs, Abejas y Fibras">🐝 Módulo 4: ECAs, Abejas y Fibras</option>
+                    <option value="Módulo 5 (Sostenibilidad): Prueba de Caja y OVOP">📦 Módulo 5: Prueba de Caja y OVOP</option>
+                  </select>
+                </div>
+
+                <div class="bg-stone-50 p-3.5 rounded-2xl border border-stone-300">
+                  <label for="input-descripcion-archivo" class="block text-xs font-black uppercase text-stone-700 mb-1">
+                    2. Nota comunitaria del archivo:
+                  </label>
+                  <input id="input-descripcion-archivo" type="text" placeholder="Ej: Presentación PDF, Foto de colmena, Video desfibrado..."
+                    class="w-full bg-white border-2 border-stone-300 rounded-xl p-2.5 text-sm font-bold" />
+                </div>
+              </div>
+
+              <div class="lg:col-span-7">
+                <div onclick="document.getElementById('input-file-bitacora').click()"
+                  class="cursor-pointer border-4 border-dashed border-emerald-700 bg-emerald-50/50 hover:bg-emerald-50 rounded-3xl p-6 text-center transition">
+                  <input id="input-file-bitacora" type="file" multiple
+                    accept=".pdf,.jpg,.jpeg,.png,.webp,.svg,.mp4,.webm,.mov,.mp3,.wav,.ogg,.xlsx,.xls,.csv,.md,.txt,.kml,*/*"
+                    onchange="cargarArchivosBitacora(this.files)" class="hidden" />
+                  <div class="text-5xl mb-2">📤📄🖼️🎬</div>
+                  <h4 class="text-lg sm:text-xl font-black text-emerald-950">
+                    Toca aquí para subir archivos desde tu Celular o Computador
+                  </h4>
+                  <p class="text-xs sm:text-sm font-bold text-stone-600 mt-1">
+                    Soporta <strong>PDF, JPEG/PNG, Videos MP4, Audios MP3, Excel/CSV, Markdown y Mapas</strong> con visor integrado.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Galería de Archivos Subidos y Pre-cargados -->
+            <div id="galeria-bitacora" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <!-- Se llena dinámicamente con JS -->
+            </div>
+          </div>
+
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ===================================================================
+       MODAL COMUNICADOR VISUAL PARLANTE PARA PERSONAS MUDAS O SIN HABLA
+       =================================================================== -->
+  <div id="modal-tablero-mudo" class="fixed inset-0 bg-black/85 z-50 hidden items-center justify-center p-3 sm:p-5">
+    <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] flex flex-col border-4 border-[#FBC02D] overflow-hidden shadow-2xl">
+      <div class="macizo-gradient text-white px-5 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="text-3xl">👐🗣️</span>
+          <div>
+            <h3 class="serif-macizo text-lg sm:text-2xl font-bold">Tablero de Voz para Personas Mudas o sin Habla</h3>
+            <p class="text-xs sm:text-sm text-amber-200 font-bold">Toca cualquier pictograma y el Avatar hablará en voz alta por ti</p>
+          </div>
+        </div>
+        <button onclick="cerrarModalComunicadorMudo()"
+          class="bg-red-600 hover:bg-red-700 text-white font-black px-4 py-2 rounded-xl text-sm border-2 border-white">
+          ✖️ Cerrar
+        </button>
+      </div>
+
+      <div class="bg-amber-300 text-stone-950 p-3.5 text-center border-b-4 border-stone-900">
+        <span class="text-xs font-black uppercase">📢 Mensaje Transmitido en Voz Alta:</span>
+        <div id="cartel-mensaje-mudo" class="text-xl sm:text-2xl font-black mt-0.5">
+          👋 ¡Buenos días compañeros del Hub Territorial!
+        </div>
+      </div>
+
+      <div id="grid-pictogramas-modal" class="p-4 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-3 bg-stone-50">
+        <!-- Se llena con JS -->
+      </div>
+
+      <div class="p-4 bg-white border-t-2 border-stone-200 flex flex-col sm:flex-row gap-2">
+        <input id="input-texto-mudo" type="text" placeholder="O escribe aquí tu mensaje para que el Avatar lo lea en voz alta..."
+          class="flex-grow bg-sky-50 border-2 border-sky-600 rounded-xl px-3.5 py-2.5 text-base font-black text-stone-900" />
+        <button onclick="hablarTextoPersonalizadoMudo()"
+          class="btn-tactil bg-[#FBC02D] hover:bg-amber-400 text-stone-950 font-black px-5 py-2.5 rounded-xl text-base border-2 border-stone-900">
+          🔊 Hablar por Mí
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================
+       PIE DE PÁGINA UNIFICADO
+       =================================================================== -->
+  <footer class="bg-stone-900 text-stone-300 py-6 border-t-4 border-emerald-800 mt-12">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs sm:text-sm font-bold">
+      <p>🌱 Proyecto Colectivo Integrado: Hub Territorial • Saberes Ancestrales • Abejas • Agricultura de Precisión • Fibras Naturales</p>
+      <p class="text-amber-300">Metodología IAP (Fals Borda) • ECAs (Freire) • Cap. 12 Hernández-Sampieri • OVOP-SENA</p>
+    </div>
+  </footer>
+
+  <!-- ===================================================================
+       LÓGICA JAVASCRIPT VANILLA UNIFICADA
+       =================================================================== -->
+  <script>
+    // ===================================================================
+    // 1. PERFILES DE LOS 6 AVATARES SABEDORES (FUSIÓN MACIZO + FINCA VIVA)
+    // ===================================================================
+    const perfilesAvatares = {
+      "Don Santiago": {
+        nombre: "Don Santiago",
+        rol: "Líder Cafetero del Macizo",
+        icono: "👨‍🌾",
+        esMujer: false,
+        colorRopa: "#1E3522",
+        pitch: 0.88,
+        rate: 0.94,
+        saludo: "¡Hola! Soy Don Santiago, líder comunitario del Macizo. Te guiaré por la ruta metodológica, el Hub Territorial y la comercialización OVOP."
+      },
+      "Doña Manuela": {
+        nombre: "Doña Manuela",
+        rol: "Sabedora y Guardiana de Semillas",
+        icono: "👩‍🌾",
+        esMujer: true,
+        colorRopa: "#9D174D",
+        pitch: 1.12,
+        rate: 0.95,
+        saludo: "¡Buen día! Soy Doña Manuela, guardiana de semillas nativas. Cuidamos las raíces del árbol del conocimiento y la soberanía alimentaria."
+      },
+      "Don José": {
+        nombre: "Don José",
+        rol: "Abuelo Sabedor Ancestral",
+        icono: "👴",
+        esMujer: false,
+        colorRopa: "#78350F",
+        pitch: 0.78,
+        rate: 0.89,
+        saludo: "Saludos, familia. Soy el abuelo José. Aquí unimos la memoria ancestral y la ecología microbiana del suelo con la ciencia."
+      },
+      "Doña Fanny": {
+        nombre: "Doña Fanny",
+        rol: "Abuela Protectora de las Abejas",
+        icono: "👵",
+        esMujer: true,
+        colorRopa: "#B45309",
+        pitch: 1.04,
+        rate: 0.91,
+        saludo: "¡Qué alegría verlos! Soy la abuela Fanny. En nuestra parcela dejamos flores sin veneno para que las abejitas nos den vida y alimento."
+      },
+      "Don Jacinto": {
+        nombre: "Don Jacinto",
+        rol: "Campesino de Fibras y Precisión",
+        icono: "🪮",
+        esMujer: false,
+        colorRopa: "#2E7D32",
+        pitch: 0.94,
+        rate: 0.93,
+        saludo: "¡Qué hubo vecino! Soy Don Jacinto. Del tallo que sobra en la cosecha sacamos fibra fuerte para reforzar plásticos y usamos el GPS en el lote."
+      },
+      "Doña Rosita": {
+        nombre: "Doña Rosita",
+        rol: "Joven Lideresa de Escuelas de Campo",
+        icono: "🌱",
+        esMujer: true,
+        colorRopa: "#0369A1",
+        pitch: 1.18,
+        rate: 0.96,
+        saludo: "¡Hola compañeros! Soy Rosita, joven rural. Con las Escuelas de Campo y la Prueba de Caja demostramos que los jóvenes sí tenemos futuro en el campo."
+      }
+    };
+
+    let avatarActualKey = "Don Santiago";
+    let escalaTextoActual = 1;
+    let modoAltoContraste = false;
+
+    function cambiarAvatarGuia(clave) {
+      if (!perfilesAvatares[clave]) return;
+      avatarActualKey = clave;
+      const p = perfilesAvatares[clave];
+
+      document.getElementById('icono-mini-avatar').textContent = p.icono;
+      document.getElementById('etiqueta-rol-avatar').textContent = `${p.nombre} (${p.rol}) — Voz y Subtítulo en Vivo:`;
+      document.getElementById('svg-ropa').setAttribute('fill', p.colorRopa);
+
+      const bigote = document.getElementById('svg-bigote');
+      const trenzas = document.getElementById('svg-trenzas');
+      if (p.esMujer) {
+        bigote.classList.add('hidden');
+        trenzas.classList.remove('hidden');
+      } else {
+        bigote.classList.remove('hidden');
+        trenzas.classList.add('hidden');
+      }
+
+      narrarTexto(p.saludo, p.icono);
+    }
+
+    function narrarTexto(texto, gesto = "🗣️👐") {
+      const burbuja = document.getElementById('texto-burbuja-avatar');
+      const iconoGesto = document.getElementById('gesto-burbuja');
+      const avatarBox = document.getElementById('avatar-contenedor-svg');
+
+      if (burbuja) burbuja.textContent = texto;
+      if (iconoGesto) iconoGesto.textContent = gesto;
+
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+
+      const msg = new SpeechSynthesisUtterance(texto);
+      msg.lang = 'es-CO';
+      const perfil = perfilesAvatares[avatarActualKey] || perfilesAvatares["Don Santiago"];
+      msg.pitch = perfil.pitch;
+      msg.rate = perfil.rate;
+
+      const voces = window.speechSynthesis.getVoices();
+      const vozEs = voces.find(v => v.lang.includes('es-CO') || v.lang.includes('es-MX') || v.lang.startsWith('es'));
+      if (vozEs) msg.voice = vozEs;
+
+      msg.onstart = () => { if (avatarBox) avatarBox.classList.add('avatar-hablando'); };
+      msg.onend = () => { if (avatarBox) avatarBox.classList.remove('avatar-hablando'); };
+      msg.onerror = () => { if (avatarBox) avatarBox.classList.remove('avatar-hablando'); };
+
+      window.speechSynthesis.speak(msg);
+    }
+
+    function hablarMensajeActualAvatar() {
+      const txt = document.getElementById('texto-burbuja-avatar').textContent;
+      narrarTexto(txt, "🔊👐");
+    }
+
+    function detenerSintesisVoz() {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      const avatarBox = document.getElementById('avatar-contenedor-svg');
+      if (avatarBox) avatarBox.classList.remove('avatar-hablando');
+    }
+
+    // ===================================================================
+    // 2. SIMULADOR DE PANTALLA Y CONTROLES DE ACCESIBILIDAD
+    // ===================================================================
+    function cambiarModoPantalla(modo) {
+      const cont = document.getElementById('contenedor-dispositivo');
+      cont.style.transition = 'all 0.3s ease';
+      if (modo === 'celular') {
+        cont.style.maxWidth = '390px';
+        cont.style.border = '12px solid #1C1917';
+        cont.style.borderRadius = '36px';
+        cont.style.padding = '10px';
+        narrarTexto('Vista de teléfono celular activada para verificar cómo lo ven los jóvenes y campesinos en la vereda.', '📱');
+      } else if (modo === 'tablet') {
+        cont.style.maxWidth = '780px';
+        cont.style.border = '10px solid #1C1917';
+        cont.style.borderRadius = '28px';
+        cont.style.padding = '14px';
+        narrarTexto('Vista de tableta comunitaria activada.', '📟');
+      } else if (modo === 'escritorio') {
+        cont.style.maxWidth = '1200px';
+        cont.style.border = '4px solid #1C1917';
+        cont.style.borderRadius = '16px';
+        cont.style.padding = '16px';
+      } else {
+        cont.style.maxWidth = '1280px';
+        cont.style.border = 'none';
+        cont.style.borderRadius = '0px';
+        cont.style.padding = '0px';
+      }
+    }
+
+    function ajustarEscalaTexto(delta) {
+      escalaTextoActual = Math.min(1.45, Math.max(0.85, escalaTextoActual + delta));
+      document.documentElement.style.setProperty('--escala-texto', escalaTextoActual);
+      narrarTexto(delta > 0 ? 'Letra más grande activada.' : 'Letra reducida.', '🔍');
+    }
+
+    function reiniciarEscalaTexto() {
+      escalaTextoActual = 1;
+      document.documentElement.style.setProperty('--escala-texto', 1);
+    }
+
+    function alternarAltoContraste() {
+      modoAltoContraste = !modoAltoContraste;
+      document.body.classList.toggle('alto-contraste', modoAltoContraste);
+      document.getElementById('lbl-contraste').textContent = modoAltoContraste ? 'Contraste: SÍ' : 'Poca Visión';
+      narrarTexto(modoAltoContraste ? 'Modo de alto contraste amarillo y negro activado para personas con poca visión.' : 'Modo de color natural del Macizo activado.', '👁️');
+    }
+
+    // ===================================================================
+    // 3. NAVEGACIÓN ENTRE LAS 7 PESTAÑAS MAESTRAS
+    // ===================================================================
+    const resumenVozPestana = {
+      1: "Pestaña uno: Síntesis del proyecto, diagrama del Ecosistema del Cambio, Árbol del Conocimiento Científico y mural de pósits.",
+      2: "Pestaña dos: Problema de la brecha tecnológica, matriz pedagógica de Paulo Freire, pregunta de investigación según Hernández Sampieri y semáforo de alcances.",
+      3: "Pestaña tres: Los cuatro engranajes de la Investigación Acción Participativa de Fals Borda y la ruta metodológica en cinco módulos.",
+      4: "Pestaña cuatro: Herramienta uno, Mapas Parlantes. Dibuja a lápiz, pon sellos del campo, ubica el G P S y correlaciona con vista satelital.",
+      5: "Pestaña cinco: Herramienta dos, Laboratorio Vivo de Escuelas de Campo. Compara parcela convencional versus manejo integrado, cuida las abejas y prueba la fuerza de la fibra en el bioplástico.",
+      6: "Pestaña seis: Herramienta tres, Simulador de la Prueba de Caja y calculadora económica costo beneficio con reducción del cincuenta por ciento en agroquímicos.",
+      7: "Pestaña siete: Sala de videoconferencia con transcripción automática, tablero de voz para personas mudas y bitácora para subir archivos P D F, fotos y videos."
+    };
+
+    function activarPestana(num) {
+      for (let i = 1; i <= 7; i++) {
+        const panel = document.getElementById('panel-tab-' + i);
+        const btn = document.getElementById('btn-tab-' + i);
+        if (!panel || !btn) continue;
+
+        const spanCol = (i === 7) ? 'col-span-2 sm:col-span-1' : '';
+        if (i === num) {
+          panel.classList.add('activo');
+          btn.className = `tab-btn btn-tactil bg-emerald-700 text-white border-2 border-[#FBC02D] rounded-2xl p-2.5 flex flex-col items-center justify-center text-center shadow-lg ${spanCol}`;
+        } else {
+          panel.classList.remove('activo');
+          btn.className = `tab-btn btn-tactil bg-stone-800 hover:bg-stone-700 text-stone-200 border-2 border-stone-700 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center ${spanCol}`;
+        }
+      }
+      if (resumenVozPestana[num]) narrarTexto(resumenVozPestana[num], "🧭");
+    }
+
+    // ===================================================================
+    // 4. INTERACTIVIDAD PESTAÑA 1: DIAGRAMA DE VENN Y MURAL DE PÓSITS
+    // ===================================================================
+    function seleccionarNodoVenn(nodo) {
+      const box = document.getElementById('info-venn-box');
+      if (nodo === 'BIOTEC') {
+        const msg = "Círculo 1 — Biotecnología Agroambiental, Agricultura de Precisión y Fibras: Bioinsumos (Bokashi/Humus), mapeo con celular y extracción de celulosa para reforzar bioplásticos.";
+        box.textContent = msg;
+        narrarTexto(msg, "🔬🪢");
+      } else if (nodo === 'IAP') {
+        const msg = "Círculo 2 — Metodología IAP y Escuelas de Campo (ECAs): Auto-aprendizaje democrático (Freire y Fals Borda), Mapas Parlantes y Prueba de Caja en el Hub Territorial.";
+        box.textContent = msg;
+        narrarTexto(msg, "🤝🏫");
+      } else if (nodo === 'ANCESTRAL') {
+        const msg = "Círculo 3 — Conocimiento Ancestral y Polinizadores: Sabiduría de pueblos originarios y abuelos, custodia de semillas nativas y corredores libres de veneno para abejas.";
+        box.textContent = msg;
+        narrarTexto(msg, "👴🐝");
+      } else {
+        const msg = "CENTRO DORADO — Soberanía Tecnológica, Alimentaria y Territorial: La biotecnología integrada mediante el diálogo participativo garantiza el buen vivir, el alimento familiar y el relevo generacional.";
+        box.textContent = msg;
+        narrarTexto(msg, "🏆🌟");
+      }
+    }
+
+    const listaPosits = [
+      { tipo: 'PROBLEMA', color: 'bg-sky-100 border-sky-400', titulo: '¿Cómo transmitir pedagógicamente el proyecto?', traduccion: 'Se resuelve mediante Escuelas de Campo (ECAs), Mapas Parlantes y esta Cartilla Viva con voz.' },
+      { tipo: 'PROBLEMA', color: 'bg-yellow-100 border-yellow-400', titulo: 'Relevo Generacional y poca población de recambio', traduccion: 'Los jóvenes lideran el mapeo con celular/GPS, la videollamada y la transformación de fibras.' },
+      { tipo: 'PROBLEMA', color: 'bg-yellow-100 border-yellow-400', titulo: 'Falta de aprovechamiento / desconocimiento de recursos', traduccion: 'Valorizamos el tallo poscosecha para bioplásticos, los microorganismos locales y las abejas.' },
+      { tipo: 'PROBLEMA', color: 'bg-yellow-100 border-yellow-400', titulo: 'Planeación de la producción en cultivos', traduccion: 'Zonificación participativa de la parcela y Análisis del Agroecosistema (AAE).' },
+      { tipo: 'PROBLEMA', color: 'bg-yellow-100 border-yellow-400', titulo: 'Salida de productos de zonas apartadas y comercialización', traduccion: 'Desfibrado y secado en origen (menor peso) + articulación en el Hub Territorial bajo modelo OVOP.' },
+      { tipo: 'PROBLEMA', color: 'bg-yellow-100 border-yellow-400', titulo: 'Falta de financiación a largo plazo y ayudas al agro', traduccion: 'Sustitución de hasta 50% en compra de agroquímicos preparando bioinsumos propios en finca.' },
+      { tipo: 'HUB', color: 'bg-emerald-100 border-emerald-400', titulo: 'Pedagogías para la Vida: IAP, IPBC, OVOP, ECAs', traduccion: 'Metodologías horizontales sujeto-sujeto donde el campesino es investigador activo.' },
+      { tipo: 'HUB', color: 'bg-emerald-100 border-emerald-400', titulo: 'Bienestar alimentario en poblaciones vulnerables', traduccion: 'Prioridad 1: asegurar el alimento limpio de la economía familiar campesina.' },
+      { tipo: 'HUB', color: 'bg-emerald-100 border-emerald-400', titulo: 'Bioeconomía, Economía Circular y Agroecología', traduccion: 'Cero desperdicio en la parcela: alimento + abono orgánico + fibra polimérica.' },
+      { tipo: 'HUB', color: 'bg-emerald-100 border-emerald-400', titulo: 'Polinización, Agricultura Regenerativa e Industria 4.0', traduccion: 'Franjas de pecoreo para abejas combinadas con sensores móviles de bajo costo.' },
+      { tipo: 'HUB', color: 'bg-amber-100 border-amber-400', titulo: 'Habilidades: Corrección, Curiosidad, Indagación e Interés', traduccion: 'El motor humano que despierta la vocación científica en los jóvenes rurales.' },
+      { tipo: 'HUB', color: 'bg-amber-100 border-amber-400', titulo: 'Hub Territorial y Materiales de Fibras Naturales', traduccion: 'Nodo comunitario donde convergen saberes ancestrales, semillas, miel y biocompuestos.' }
+    ];
+
+    function filtrarPosits(filtro) {
+      const grid = document.getElementById('grid-posits-diagnostico');
+      if (!grid) return;
+      const filtrados = listaPosits.filter(p => filtro === 'TODOS' || p.tipo === filtro);
+      grid.innerHTML = filtrados.map(p => `
+        <div onclick="narrarTexto('Nota del taller: ${p.titulo}. Cómo lo resolvemos: ${p.traduccion}', '📌')"
+          class="cursor-pointer ${p.color} border-2 rounded-2xl p-4 shadow hover:shadow-md transition flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-black uppercase bg-black/10 px-2 py-0.5 rounded">${p.tipo === 'PROBLEMA' ? 'Diagnóstico de Campo' : 'Eje del Hub Territorial'}</span>
+            <h4 class="font-black text-stone-900 text-base mt-1.5">«${p.titulo}»</h4>
+            <p class="text-xs sm:text-sm font-bold text-stone-700 mt-1.5">${p.traduccion}</p>
+          </div>
+          <span class="text-[11px] font-black text-emerald-900 mt-3 block">🔊 Toca para oír</span>
+        </div>
+      `).join('');
+    }
+
+    // ===================================================================
+    // 5. PESTAÑA 4: HERRAMIENTA I — LIENZO DE MAPAS PARLANTES, SELLOS, SATÉLITE Y GPS
+    // ===================================================================
+    let canvasMapa = null;
+    let ctxMapa = null;
+    let pintandoEnMapa = false;
+    let herramientaMapa = 'LAPIZ'; // 'LAPIZ' o 'SELLO'
+    let colorTrazo = '#1C1917';
+    let grosorTrazo = 5;
+    let selloEmoji = '🏡';
+    let selloTexto = 'Casa';
+    let modoFondoMapa = 'PARLANTE'; // 'LIENZO', 'PARLANTE', 'SATELITE'
+    let imagenMapaPersonalizada = null;
+
+    function inicializarMapaParlante() {
+      canvasMapa = document.getElementById('canvas-dibujo-mapa');
+      if (!canvasMapa) return;
+      ctxMapa = canvasMapa.getContext('2d');
+      dibujarFondoSegunCapa();
+
+      canvasMapa.addEventListener('mousedown', empezarTrazo);
+      canvasMapa.addEventListener('mousemove', moverTrazo);
+      window.addEventListener('mouseup', terminarTrazo);
+
+      canvasMapa.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        empezarTrazo(e.touches[0]);
+      }, { passive: false });
+      canvasMapa.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        moverTrazo(e.touches[0]);
+      }, { passive: false });
+      canvasMapa.addEventListener('touchend', terminarTrazo);
+    }
+
+    function dibujarFondoSegunCapa() {
+      if (!ctxMapa || !canvasMapa) return;
+      const w = canvasMapa.width;
+      const h = canvasMapa.height;
+
+      if (imagenMapaPersonalizada) {
+        ctxMapa.drawImage(imagenMapaPersonalizada, 0, 0, w, h);
+        return;
+      }
+
+      if (modoFondoMapa === 'LIENZO') {
+        ctxMapa.fillStyle = '#FFFFFF';
+        ctxMapa.fillRect(0, 0, w, h);
+        ctxMapa.strokeStyle = '#CBD5E1';
+        ctxMapa.lineWidth = 2;
+        ctxMapa.strokeRect(16, 16, w - 32, h - 32);
+        ctxMapa.fillStyle = '#1E293B';
+        ctxMapa.font = 'bold 20px Nunito, sans-serif';
+        ctxMapa.fillText('🗺️ CROQUIS COMUNITARIO A LÁPIZ (Dibuja tu parcela, agua y abejas)', 30, 46);
+      } else if (modoFondoMapa === 'PARLANTE') {
+        // Paisaje ilustrado de Mapa Parlante (Montañas del Macizo, río, parcelas y pósits)
+        const gradCielo = ctxMapa.createLinearGradient(0, 0, 0, h);
+        gradCielo.addColorStop(0, '#FEF3C7');
+        gradCielo.addColorStop(0.35, '#DCFCE7');
+        gradCielo.addColorStop(1, '#BBF7D0');
+        ctxMapa.fillStyle = gradCielo;
+        ctxMapa.fillRect(0, 0, w, h);
+
+        // Montañas del Macizo
+        ctxMapa.fillStyle = '#86EFAC';
+        ctxMapa.beginPath();
+        ctxMapa.moveTo(0, 190);
+        ctxMapa.quadraticCurveTo(180, 60, 380, 180);
+        ctxMapa.quadraticCurveTo(620, 40, 900, 190);
+        ctxMapa.lineTo(900, h);
+        ctxMapa.lineTo(0, h);
+        ctxMapa.fill();
+
+        // Río / Fuente hídrica atravesando la vereda
+        ctxMapa.strokeStyle = '#38BDF8';
+        ctxMapa.lineWidth = 18;
+        ctxMapa.beginPath();
+        ctxMapa.moveTo(120, 120);
+        ctxMapa.bezierCurveTo(320, 240, 480, 280, 860, 470);
+        ctxMapa.stroke();
+
+        // Parcelas pre-dibujadas y etiquetas de Mapa Parlante
+        ctxMapa.fillStyle = '#14532D';
+        ctxMapa.font = 'bold 19px Nunito, sans-serif';
+        ctxMapa.fillText('🏔️ MAPA PARLANTE DEL TERRITORIO (Raya encima o pon sellos)', 28, 38);
+        ctxMapa.fillText('💧 Quebrada / Agua', 430, 295);
+        ctxMapa.fillText('🐝 Corredor de Abejas', 640, 180);
+        ctxMapa.fillText('🌾 Custodia de Semillas (Mujer Rural)', 80, 420);
+        ctxMapa.fillText('🍌 Lote de Plátano y Café (Fibra + Alimento)', 520, 390);
+      } else if (modoFondoMapa === 'SATELITE') {
+        // Simulación visual de ortofoto satelital multiespectral
+        const gradSat = ctxMapa.createLinearGradient(0, 0, w, h);
+        gradSat.addColorStop(0, '#052E16');
+        gradSat.addColorStop(0.5, '#14532D');
+        gradSat.addColorStop(1, '#064E3B');
+        ctxMapa.fillStyle = gradSat;
+        ctxMapa.fillRect(0, 0, w, h);
+
+        // Cuadrícula de teledetección / NDVI
+        ctxMapa.strokeStyle = 'rgba(74, 222, 128, 0.22)';
+        ctxMapa.lineWidth = 1;
+        for (let x = 0; x < w; x += 60) {
+          ctxMapa.beginPath(); ctxMapa.moveTo(x, 0); ctxMapa.lineTo(x, h); ctxMapa.stroke();
+        }
+        for (let y = 0; y < h; y += 60) {
+          ctxMapa.beginPath(); ctxMapa.moveTo(0, y); ctxMapa.lineTo(w, y); ctxMapa.stroke();
+        }
+
+        // Polígonos de vigor NDVI
+        ctxMapa.fillStyle = 'rgba(34, 197, 94, 0.35)';
+        ctxMapa.fillRect(110, 130, 260, 180);
+        ctxMapa.strokeStyle = '#4ADE80';
+        ctxMapa.lineWidth = 3;
+        ctxMapa.strokeRect(110, 130, 260, 180);
+
+        ctxMapa.fillStyle = 'rgba(250, 204, 21, 0.35)';
+        ctxMapa.fillRect(460, 160, 310, 210);
+        ctxMapa.strokeStyle = '#FACC15';
+        ctxMapa.strokeRect(460, 160, 310, 210);
+
+        ctxMapa.fillStyle = '#ECFDF5';
+        ctxMapa.font = 'bold 19px Nunito, sans-serif';
+        ctxMapa.fillText('🛰️ VISTA SATELITAL Y ZONIFICACIÓN DE PRECISIÓN (NDVI)', 28, 38);
+        ctxMapa.fillText('📍 Polígono 1: Huerta y Semillas (Alto Vigor)', 125, 165);
+        ctxMapa.fillText('📍 Polígono 2: Zona de Amortiguamiento de Abejas', 475, 195);
+      }
+    }
+
+    function cambiarFondoMapa(modo) {
+      modoFondoMapa = modo;
+      imagenMapaPersonalizada = null;
+      dibujarFondoSegunCapa();
+
+      ['lienzo', 'parlante', 'satelite'].forEach(id => {
+        const b = document.getElementById('btn-capa-' + id);
+        if (!b) return;
+        b.className = (id.toUpperCase() === modo)
+          ? 'bg-emerald-800 text-white font-black py-2 px-2 rounded-xl text-xs shadow'
+          : 'bg-white text-stone-800 border border-stone-400 font-black py-2 px-2 rounded-xl text-xs';
+      });
+
+      narrarTexto('Capa del mapa cambiada a ' + modo.toLowerCase() + '.', '🗺️');
+    }
+
+    function cargarFotoMapaArtesanal(input) {
+      if (!input.files || !input.files[0]) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          imagenMapaPersonalizada = img;
+          dibujarFondoSegunCapa();
+          narrarTexto('Fotografía del mapa artesanal de la comunidad cargada en el lienzo. Ahora puedes rayar o estampar sellos encima.', '🖼️🗺️');
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+
+    function coordsCanvas(ev) {
+      const r = canvasMapa.getBoundingClientRect();
+      return {
+        x: (ev.clientX - r.left) * (canvasMapa.width / r.width),
+        y: (ev.clientY - r.top) * (canvasMapa.height / r.height)
+      };
+    }
+
+    function empezarTrazo(ev) {
+      const p = coordsCanvas(ev);
+      if (herramientaMapa === 'SELLO') {
+        ctxMapa.font = '42px sans-serif';
+        ctxMapa.textAlign = 'center';
+        ctxMapa.fillText(selloEmoji, p.x, p.y);
+        ctxMapa.fillStyle = modoFondoMapa === 'SATELITE' ? '#FEF08A' : '#111827';
+        ctxMapa.font = 'bold 16px Nunito, sans-serif';
+        ctxMapa.fillText(selloTexto, p.x, p.y + 22);
+        ctxMapa.textAlign = 'start';
+        narrarTexto('Sello estampado: ' + selloTexto, selloEmoji);
+        return;
+      }
+      pintandoEnMapa = true;
+      ctxMapa.beginPath();
+      ctxMapa.moveTo(p.x, p.y);
+      ctxMapa.strokeStyle = colorTrazo;
+      ctxMapa.lineWidth = grosorTrazo;
+      ctxMapa.lineCap = 'round';
+      ctxMapa.lineJoin = 'round';
+    }
+
+    function moverTrazo(ev) {
+      if (!pintandoEnMapa || herramientaMapa !== 'LAPIZ') return;
+      const p = coordsCanvas(ev);
+      ctxMapa.lineTo(p.x, p.y);
+      ctxMapa.stroke();
+    }
+
+    function terminarTrazo() {
+      pintandoEnMapa = false;
+    }
+
+    function activarLapiz(color, grosor, descripcion) {
+      herramientaMapa = 'LAPIZ';
+      colorTrazo = color;
+      grosorTrazo = grosor;
+      document.getElementById('txt-herramienta-mapa').textContent = '✏️ Activo: ' + descripcion;
+      narrarTexto(descripcion, '✏️');
+    }
+
+    function activarSello(emoji, nombre) {
+      herramientaMapa = 'SELLO';
+      selloEmoji = emoji;
+      selloTexto = nombre;
+      document.getElementById('txt-herramienta-mapa').textContent = `📌 Sello Activo: ${emoji} ${nombre} (Toca el mapa para ponerlo)`;
+      narrarTexto('Sello seleccionado: ' + nombre + '. Toca cualquier parte del mapa.', emoji);
+    }
+
+    function limpiarTrazosMapa() {
+      dibujarFondoSegunCapa();
+      narrarTexto('Lienzo del mapa restaurado.', '🧽');
+    }
+
+    function ubicarGPSRealEnMapa() {
+      const lbl = document.getElementById('txt-gps-actual');
+      lbl.textContent = 'Buscando satélite...';
+
+      const estamparCoordenada = (lat, lon, origen) => {
+        const textoGps = `📍 ${origen}: Lat ${lat}, Lon ${lon}`;
+        lbl.textContent = `Lat ${lat}, Lon ${lon}`;
+        if (ctxMapa && canvasMapa) {
+          ctxMapa.fillStyle = 'rgba(2, 132, 199, 0.92)';
+          ctxMapa.fillRect(30, canvasMapa.height - 56, canvasMapa.width - 60, 40);
+          ctxMapa.fillStyle = '#FFFFFF';
+          ctxMapa.font = 'bold 18px Nunito, sans-serif';
+          ctxMapa.textAlign = 'center';
+          ctxMapa.fillText(textoGps, canvasMapa.width / 2, canvasMapa.height - 30);
+          ctxMapa.textAlign = 'start';
+        }
+        narrarTexto('Coordenadas G P S estampadas en la parte inferior del Mapa Parlante.', '📡📍');
+      };
+
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => estamparCoordenada(pos.coords.latitude.toFixed(4) + '°', pos.coords.longitude.toFixed(4) + '°', 'GPS Finca'),
+          () => estamparCoordenada('2.1458° N', '-76.4129° O', 'Nodo Hub Macizo / Vereda'),
+          { timeout: 4500 }
+        );
+      } else {
+        estamparCoordenada('2.1458° N', '-76.4129° O', 'Nodo Hub Macizo / Vereda');
+      }
+    }
+
+    function guardarMapaEnBitacora() {
+      if (!canvasMapa) return;
+      const urlImagen = canvasMapa.toDataURL('image/png');
+      archivosBitacora.unshift({
+        id: 'mapa-' + Date.now(),
+        nombre: 'Mapa_Parlante_Comunitario.png',
+        tipo: 'IMAGEN',
+        modulo: 'Módulo 2 (Brown): Mapas Parlantes y Diagnóstico',
+        nota: 'Mapa Parlante intervenido con trazos a lápiz, sellos comunitarios y georreferenciación GPS.',
+        url: urlImagen
+      });
+      renderizarBitacora();
+      narrarTexto('¡Mapa Parlante guardado en la Bitácora de Archivos! Vamos a la pestaña siete para verlo.', '💾🗺️');
+      setTimeout(() => activarPestana(7), 1100);
+    }
+
+    // ===================================================================
+    // 6. PESTAÑA 5: HERRAMIENTA II — LABORATORIO VIVO ECA Y BIOPLÁSTICO
+    // ===================================================================
+    let accionActualECA = 'BOKASHI';
+    const lotesECA = [
+      { id: 0, nombre: 'Lote 1: Borde de Quebrada', estado: 'CONVENCIONAL' },
+      { id: 1, nombre: 'Lote 2: Surco de Plátano y Café', estado: 'CONVENCIONAL' },
+      { id: 2, nombre: 'Lote 3: Huerta de Semillas Nativas', estado: 'CONVENCIONAL' },
+      { id: 3, nombre: 'Lote 4: Lindero de Flores Silvestres', estado: 'CONVENCIONAL' },
+      { id: 4, nombre: 'Lote 5: Parcela de Jóvenes Rurales', estado: 'CONVENCIONAL' },
+      { id: 5, nombre: 'Lote 6: Zona de Tallos Poscosecha', estado: 'CONVENCIONAL' }
+    ];
+
+    function seleccionarAccionECA(accion) {
+      accionActualECA = accion;
+      const estilos = {
+        BOKASHI: document.getElementById('btn-eca-bokashi'),
+        ABEJAS: document.getElementById('btn-eca-abejas'),
+        PRECISION: document.getElementById('btn-eca-precision')
+      };
+      Object.keys(estilos).forEach(k => {
+        if (!estilos[k]) return;
+        estilos[k].className = (k === accion)
+          ? 'btn-tactil bg-emerald-700 text-white border-3 border-stone-900 rounded-2xl p-4 text-left flex items-center gap-3 shadow-lg'
+          : 'btn-tactil bg-white text-stone-900 border-3 border-stone-300 rounded-2xl p-4 text-left flex items-center gap-3';
+      });
+
+      if (accion === 'BOKASHI') narrarTexto('Herramienta seleccionada: Aplicar bioinsumos locales como humus de lombriz y Bokashi para regenerar la microbiota del suelo.', '🪱🧪');
+      if (accion === 'ABEJAS') narrarTexto('Herramienta seleccionada: Corredor de abejas sin veneno para aumentar la polinización.', '🐝🌻');
+      if (accion === 'PRECISION') narrarTexto('Herramienta seleccionada: Agricultura de precisión con celular y cosecha dual de alimento y fibra.', '📱🍌');
+    }
+
+    function renderizarLotesECA() {
+      const grid = document.getElementById('grid-lotes-eca');
+      if (!grid) return;
+      grid.innerHTML = lotesECA.map((l, idx) => {
+        let fondo = 'bg-red-50 border-red-300';
+        let icono = '🥀🛢️';
+        let desc = 'Manejo Convencional (Suelo agotado y alto gasto químico)';
+
+        if (l.estado === 'BOKASHI') {
+          fondo = 'bg-emerald-50 border-[#2E7D32]';
+          icono = '🪱🌱✨';
+          desc = 'Parcela MIC: Suelo vivo con Bokashi y Humus (-50% químicos)';
+        } else if (l.estado === 'ABEJAS') {
+          fondo = 'bg-amber-50 border-amber-500';
+          icono = '🐝🌻🍯';
+          desc = 'Parcela MIC: Franja libre de veneno y alta polinización';
+        } else if (l.estado === 'PRECISION') {
+          fondo = 'bg-sky-50 border-sky-600';
+          icono = '📱🍌🪢';
+          desc = 'Parcela MIC: Alimento familiar + Tallo listo para fibra';
+        }
+
+        return `
+          <button onclick="intervenirLoteECA(${idx})"
+            class="btn-tactil ${fondo} border-3 rounded-2xl p-4 flex flex-col items-center justify-center text-center transition">
+            <span class="text-xs font-black uppercase text-stone-600">${l.nombre}</span>
+            <span class="text-4xl my-2">${icono}</span>
+            <span class="text-xs sm:text-sm font-extrabold text-stone-900">${desc}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function intervenirLoteECA(idx) {
+      lotesECA[idx].estado = accionActualECA;
+      renderizarLotesECA();
+      const convertidos = lotesECA.filter(l => l.estado !== 'CONVENCIONAL').length;
+      const banner = document.getElementById('banner-estado-eca');
+      banner.textContent = `✅ Análisis del Agroecosistema (AAE): ${convertidos} de 6 lotes transformados a Manejo Integrado (MIC) y Bioeconomía Circular.`;
+      narrarTexto(`Lote transformado con éxito en la Escuela de Campo. Llevamos ${convertidos} de seis lotes regenerados.`, '🌱✅');
+    }
+
+    function probarCargaBioplastico(bultos) {
+      const vSimple = document.getElementById('vista-plastico-simple');
+      const lSimple = document.getElementById('lbl-plastico-simple');
+      const vRef = document.getElementById('vista-plastico-reforzado');
+      const lRef = document.getElementById('lbl-plastico-reforzado');
+      if (!vSimple) return;
+
+      const iconosBultos = '📦'.repeat(bultos);
+      if (bultos === 1) {
+        vSimple.innerHTML = `<div class="text-3xl mb-1">${iconosBultos}</div><div class="w-44 h-4 bg-red-300 rounded-full border border-red-600"></div>`;
+        lSimple.textContent = 'Con carga liviana resiste apenas.';
+        vRef.innerHTML = `<div class="text-3xl mb-1">${iconosBultos}</div><div class="w-44 h-5 bg-[#2E7D32] rounded-full border-2 border-stone-900 text-[10px] text-amber-300 font-black flex items-center justify-center">══════════</div>`;
+        lRef.textContent = 'Totalmente firme gracias a los haces de fibra natural.';
+      } else if (bultos === 2) {
+        vSimple.innerHTML = `<div class="text-3xl mb-1">${iconosBultos}</div><div class="w-44 h-4 bg-red-400 rounded-full transform rotate-6"></div><span class="text-xs font-black text-red-700 mt-1">¡Se deforma!</span>`;
+        lSimple.textContent = 'El plástico sin refuerzo cede ante la flexión.';
+        vRef.innerHTML = `<div class="text-3xl mb-1">${iconosBultos}</div><div class="w-44 h-5 bg-[#2E7D32] rounded-full border-2 border-stone-900 text-[10px] text-amber-300 font-black flex items-center justify-center">══════════</div>`;
+        lRef.textContent = 'La fibra lignocelulósica absorbe el esfuerzo mecánico.';
+      } else {
+        vSimple.innerHTML = `<div class="text-3xl mb-1">${iconosBultos} 💥</div><div class="flex gap-2"><div class="w-20 h-4 bg-red-600 rounded-l-full rotate-12"></div><div class="w-20 h-4 bg-red-600 rounded-r-full -rotate-12"></div></div><span class="text-xs font-black text-red-800 mt-1">❌ FRACTURA</span>`;
+        lSimple.textContent = 'Se rompe por falta de refuerzo estructural.';
+        vRef.innerHTML = `<div class="text-3xl mb-1">${iconosBultos} 🏆</div><div class="w-44 h-5 bg-[#2E7D32] rounded-full border-2 border-stone-900 text-[10px] text-amber-300 font-black flex items-center justify-center">══════════</div><span class="text-xs font-black text-emerald-900 mt-1">✅ RESISTENCIA SUPERIOR</span>`;
+        lRef.textContent = '¡El biocomuesto con fibra de nuestra finca soporta toda la carga!';
+        narrarTexto('Con tres bultos pesados, el plástico común se parte, mientras que el biocompuesto reforzado con fibras naturales de la finca resiste firme.', '🪢🏆');
+      }
+    }
+
+    // ===================================================================
+    // 7. PESTAÑA 6: HERRAMIENTA III — PRUEBA DE CAJA Y CALCULADORA ECONÓMICA
+    // ===================================================================
+    const bancoPreguntasCaja = [
+      {
+        pregunta: "¿Qué debemos hacer con las flores en los bordes del lote y los tallos que sobran tras la cosecha?",
+        cajas: [
+          { num: 1, texto: "Caja 1: Fumigar parejo con veneno y quemar o dejar podrir el tallo.", correcta: false, explicacion: "Si fumigamos las flores matamos a las abejas y si botamos el tallo perdemos fibra valiosa." },
+          { num: 2, texto: "Caja 2: Dejar las flores sin veneno para las abejas y peinar el tallo para sacar fibra fuerte.", correcta: true, explicacion: "¡Exacto! En la Escuela de Campo aprendimos que las abejas aumentan la cosecha y del tallo sacamos fibra para reforzar bioplásticos." },
+          { num: 3, texto: "Caja 3: Esperar a que llegue un subsidio externo sin hacer nada en la parcela.", correcta: false, explicacion: "La soberanía tecnológica empieza con la acción participativa en nuestra propia finca." }
+        ]
+      },
+      {
+        pregunta: "¿Cómo podemos bajar hasta en un 50% el gasto en agroquímicos caros sin perder cosecha?",
+        cajas: [
+          { num: 1, texto: "Caja 1: Preparando bioinsumos locales (Bokashi, humus y microorganismos) y abonando con precisión.", correcta: true, explicacion: "¡Muy bien! Los bioinsumos regeneran la ecología microbiana del suelo y reducen a la mitad el gasto químico." },
+          { num: 2, texto: "Caja 2: Aplicando el doble de plaguicidas sintéticos cada semana.", correcta: false, explicacion: "Eso contamina el agua, intoxica la tierra y endeuda a la familia." },
+          { num: 3, texto: "Caja 3: Abandonando el cultivo de comida familiar.", correcta: false, explicacion: "El bienestar alimentario de la familia siempre es lo primero." }
+        ]
+      },
+      {
+        pregunta: "¿Para qué hacemos primero un Mapa Parlante en las reuniones de la vereda?",
+        cajas: [
+          { num: 1, texto: "Caja 1: Solo para cumplir un requisito de oficina.", correcta: false, explicacion: "En la IAP nada se hace por burocracia: los significados nacen del terreno." },
+          { num: 2, texto: "Caja 2: Para reconocer el saber ancestral, el agua, las semillas de las mujeres rurales y las zonas de abejas antes de usar tecnología.", correcta: true, explicacion: "¡Correcto! El Mapa Parlante une la memoria colectiva y la geografía local con la ciencia." },
+          { num: 3, texto: "Caja 3: Para reemplazar a los abuelos sabedores.", correcta: false, explicacion: "Al contrario: los abuelos y sabedores son la raíz del Árbol del Conocimiento." }
+        ]
+      }
+    ];
+
+    let indicePreguntaCaja = 0;
+
+    function renderizarPruebaDeCaja() {
+      const actual = bancoPreguntasCaja[indicePreguntaCaja];
+      document.getElementById('badge-pregunta-caja').textContent = `Pregunta de Campo ${indicePreguntaCaja + 1} de ${bancoPreguntasCaja.length} (Evaluación Pre y Post ECA):`;
+      document.getElementById('titulo-pregunta-caja').textContent = actual.pregunta;
+
+      const cont = document.getElementById('contenedor-tres-cajas');
+      cont.innerHTML = actual.cajas.map((c, i) => `
+        <button onclick="votarEnCaja(${i})"
+          class="btn-tactil bg-amber-100/90 hover:bg-amber-200 border-4 border-[#5D4037] rounded-3xl p-5 flex flex-col items-center justify-between text-center shadow-md">
+          <div class="w-20 h-14 bg-[#5D4037] text-amber-200 rounded-2xl border-2 border-stone-900 flex flex-col items-center justify-center mb-3 shadow-inner">
+            <div class="w-10 h-1.5 bg-stone-950 rounded-full mb-1"></div>
+            <span class="font-black text-sm">CAJA ${c.num}</span>
+          </div>
+          <p class="text-base sm:text-lg font-black text-stone-900">${c.texto}</p>
+          <span class="mt-4 bg-[#FBC02D] text-stone-950 font-black text-xs px-3 py-1.5 rounded-xl border border-stone-900">
+            🗳️ Depositar mi papeleta aquí
+          </span>
+        </button>
+      `).join('');
+    }
+
+    function votarEnCaja(indiceCaja) {
+      const actual = bancoPreguntasCaja[indicePreguntaCaja];
+      const elegida = actual.cajas[indiceCaja];
+      const res = document.getElementById('resultado-prueba-caja');
+      res.classList.remove('hidden');
+
+      if (elegida.correcta) {
+        res.className = "mt-5 p-4 rounded-2xl bg-emerald-100 border-3 border-[#2E7D32] text-emerald-950 font-black text-center text-base sm:text-lg";
+        res.textContent = "✅ " + elegida.explicacion;
+        narrarTexto(elegida.explicacion, "🗳️🏆");
+      } else {
+        res.className = "mt-5 p-4 rounded-2xl bg-amber-100 border-3 border-amber-600 text-amber-950 font-black text-center text-base sm:text-lg";
+        res.textContent = "💡 Reflexión de la Escuela de Campo: " + elegida.explicacion;
+        narrarTexto(elegida.explicacion, "🤔🌱");
+      }
+    }
+
+    function siguientePreguntaCaja() {
+      indicePreguntaCaja = (indicePreguntaCaja + 1) % bancoPreguntasCaja.length;
+      document.getElementById('resultado-prueba-caja').classList.add('hidden');
+      renderizarPruebaDeCaja();
+      narrarTexto(bancoPreguntasCaja[indicePreguntaCaja].pregunta, "🗳️");
+    }
+
+    function actualizarCalculadoraEconomica() {
+      const gastoQuimico = parseInt(document.getElementById('slider-gasto-quimico').value, 10);
+      const adopcionPct = parseInt(document.getElementById('slider-adopcion-bio').value, 10);
+      const kilosFibra = parseInt(document.getElementById('slider-tallos-fibra').value, 10);
+
+      const ahorroQuimico = Math.round(gastoQuimico * (adopcionPct / 100));
+      const ingresoFibra = kilosFibra * 3500; // Valor estimado por kg de fibra limpia y seca en Hub
+      const totalBeneficio = ahorroQuimico + ingresoFibra;
+
+      const fmt = (n) => '$' + n.toLocaleString('es-CO') + ' COP';
+
+      document.getElementById('lbl-gasto-quimico').textContent = fmt(gastoQuimico);
+      document.getElementById('lbl-adopcion-bio').textContent = `${adopcionPct}% de reducción en agroquímicos tóxicos`;
+      document.getElementById('lbl-tallos-fibra').textContent = `${kilosFibra} kg de fibra natural seca`;
+
+      document.getElementById('res-ahorro-pesos').textContent = fmt(ahorroQuimico);
+      document.getElementById('res-ingreso-fibra').textContent = '+' + fmt(ingresoFibra);
+      document.getElementById('res-beneficio-total').textContent = '+' + fmt(totalBeneficio);
+    }
+
+    // ===================================================================
+    // 8. PESTAÑA 7: VIDEOCONFERENCIA, TRANSCRIPCIÓN IA, CHAT Y TABLERO MUDO
+    // ===================================================================
+    let streamVideo = null;
+    let intervaloVideoSimulado = null;
+    let reconocimientoVoz = null;
+
+    async function iniciarSalaConferencia() {
+      const video = document.getElementById('video-conferencia');
+      const canvasSim = document.getElementById('canvas-video-simulado');
+      const placeholder = document.getElementById('placeholder-video');
+
+      try {
+        if (intervaloVideoSimulado) { clearInterval(intervaloVideoSimulado); intervaloVideoSimulado = null; }
+        streamVideo = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        video.srcObject = streamVideo;
+        video.classList.remove('hidden');
+        canvasSim.classList.add('hidden');
+        placeholder.classList.add('hidden');
+        narrarTexto('Cámara y micrófono activados en la sala del Hub Territorial.', '📹✅');
+        iniciarTranscripcionVozATexto();
+      } catch (e) {
+        activarModoVideoFinca();
+      }
+    }
+
+    function activarModoVideoFinca() {
+      apagarSalaConferencia(false);
+      const video = document.getElementById('video-conferencia');
+      const canvasSim = document.getElementById('canvas-video-simulado');
+      const placeholder = document.getElementById('placeholder-video');
+
+      video.classList.add('hidden');
+      placeholder.classList.add('hidden');
+      canvasSim.classList.remove('hidden');
+
+      const ctx = canvasSim.getContext('2d');
+      let paso = 0;
+      intervaloVideoSimulado = setInterval(() => {
+        paso++;
+        ctx.fillStyle = '#0F2415';
+        ctx.fillRect(0, 0, canvasSim.width, canvasSim.height);
+        ctx.fillStyle = '#FBC02D';
+        ctx.font = 'bold 22px Nunito, sans-serif';
+        ctx.fillText('📡 CONEXIÓN EN VIVO: HUB TERRITORIAL Y ESCUELA DE CAMPO', 28, 45);
+        ctx.font = '60px sans-serif';
+        ctx.fillText('👩‍🌾 👴 🐝 🍌 🪢', 110, 185 + Math.sin(paso * 0.25) * 8);
+        ctx.fillStyle = '#A7F3D0';
+        ctx.font = 'bold 19px Nunito, sans-serif';
+        ctx.fillText('Diálogo de saberes: Bioinsumos, Abejas y Desfibrado en Finca', 65, 290);
+      }, 120);
+
+      narrarTexto('Modo demostrativo de videollamada rural activo.', '🏞️📹');
+    }
+
+    function apagarSalaConferencia(hablar = true) {
+      if (streamVideo) {
+        streamVideo.getTracks().forEach(t => t.stop());
+        streamVideo = null;
+      }
+      if (intervaloVideoSimulado) {
+        clearInterval(intervaloVideoSimulado);
+        intervaloVideoSimulado = null;
+      }
+      if (reconocimientoVoz) {
+        try { reconocimientoVoz.stop(); } catch (e) {}
+      }
+      document.getElementById('video-conferencia').classList.add('hidden');
+      document.getElementById('canvas-video-simulado').classList.add('hidden');
+      document.getElementById('placeholder-video').classList.remove('hidden');
+      if (hablar) narrarTexto('Cámara apagada.', '⏹️');
+    }
+
+    function iniciarTranscripcionVozATexto() {
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const caja = document.getElementById('caja-transcripcion-ia');
+      if (!SpeechRec) return;
+
+      reconocimientoVoz = new SpeechRec();
+      reconocimientoVoz.lang = 'es-CO';
+      reconocimientoVoz.continuous = true;
+      reconocimientoVoz.onresult = (ev) => {
+        let textoFinal = '';
+        for (let i = ev.resultIndex; i < ev.results.length; i++) {
+          if (ev.results[i].isFinal) textoFinal += ev.results[i][0].transcript;
+        }
+        if (textoFinal) {
+          agregarLineaTranscripcion(textoFinal);
+        }
+      };
+      try { reconocimientoVoz.start(); } catch (e) {}
+    }
+
+    function agregarLineaTranscripcion(texto) {
+      const caja = document.getElementById('caja-transcripcion-ia');
+      const sub = document.getElementById('subtitulo-camara-vivo');
+      if (caja) {
+        const p = document.createElement('p');
+        p.className = "bg-white p-1.5 rounded-lg border border-emerald-200 text-stone-900";
+        p.textContent = "🗣️ " + texto;
+        caja.prepend(p);
+      }
+      if (sub) {
+        sub.textContent = "🗣️ " + texto;
+        sub.classList.remove('hidden');
+      }
+    }
+
+    function capturarFotoParaBitacora() {
+      const video = document.getElementById('video-conferencia');
+      const canvasSim = document.getElementById('canvas-video-simulado');
+      const c = document.createElement('canvas');
+      c.width = 640; c.height = 360;
+      const ctx = c.getContext('2d');
+
+      if (!video.classList.contains('hidden') && streamVideo) {
+        ctx.drawImage(video, 0, 0, 640, 360);
+      } else if (!canvasSim.classList.contains('hidden')) {
+        ctx.drawImage(canvasSim, 0, 0, 640, 360);
+      } else {
+        activarModoVideoFinca();
+        setTimeout(capturarFotoParaBitacora, 280);
+        return;
+      }
+
+      archivosBitacora.unshift({
+        id: 'captura-' + Date.now(),
+        nombre: 'Evidencia_Videoconferencia_ECA.jpg',
+        tipo: 'IMAGEN',
+        modulo: 'Módulo 4 (Bright Green): ECAs, Abejas y Fibras',
+        nota: 'Captura fotográfica tomada en vivo durante la sesión sincrónica de la Escuela de Campo.',
+        url: c.toDataURL('image/jpeg', 0.9)
+      });
+      renderizarBitacora();
+      narrarTexto('Fotografía guardada en la Bitácora Multimedia abajo.', '📸✅');
+    }
+
+    function enviarMensajeChat() {
+      const input = document.getElementById('input-chat-comunitario');
+      const txt = input.value.trim();
+      if (!txt) return;
+
+      const lista = document.getElementById('lista-mensajes-chat');
+      const divUser = document.createElement('div');
+      divUser.className = "bg-emerald-50 p-2.5 rounded-xl border border-emerald-300 font-bold text-stone-900";
+      divUser.innerHTML = `<span class="text-emerald-900 font-black block text-xs">Tú (Investigador / Productor):</span> ${txt}`;
+      lista.appendChild(divUser);
+      agregarLineaTranscripcion(txt);
+      input.value = '';
+      lista.scrollTop = lista.scrollHeight;
+
+      setTimeout(() => {
+        const p = perfilesAvatares[avatarActualKey];
+        const divReply = document.createElement('div');
+        divReply.className = "bg-amber-50 p-2.5 rounded-xl border border-amber-300 font-bold text-stone-900";
+        const respuesta = `¡Valioso aporte! Lo integramos en el diario de campo de nuestra Escuela de Campo para fortalecer la soberanía alimentaria y el cuidado de las abejas.`;
+        divReply.innerHTML = `<span class="text-amber-950 font-black block text-xs">${p.nombre} (${p.rol}):</span> ${respuesta}`;
+        lista.appendChild(divReply);
+        lista.scrollTop = lista.scrollHeight;
+        narrarTexto(respuesta, p.icono);
+      }, 900);
+    }
+
+    // ===================================================================
+    // 9. TABLERO COMUNICADOR CON VOZ PARA PERSONAS MUDAS
+    // ===================================================================
+    const pictogramasMudos = [
+      { emoji: "👋😊", corto: "¡Buenos días vecinos!", frase: "¡Buenos días vecinos y compañeros del Hub Territorial! Quiero participar." },
+      { emoji: "🌱🍲", corto: "Primero la comida", frase: "En mi familia primero aseguramos la comida sana y protegemos las semillas nativas." },
+      { emoji: "🐝🌻", corto: "Cuidemos las abejas", frase: "En mi parcela dejamos flores sin veneno para proteger a las abejitas." },
+      { emoji: "🪢🧱", corto: "Tengo tallos para fibra", frase: "Tengo tallos cosechados listos para sacar fibra natural y reforzar bioplásticos." },
+      { emoji: "🪱🧪", corto: "Quiero hacer Bokashi", frase: "Quiero aprender a preparar bioinsumos y humus en la Escuela de Campo para no comprar químicos caros." },
+      { emoji: "🗺️📍", corto: "Miren mi Mapa Parlante", frase: "Por favor miren el Mapa Parlante de mi finca que dibujé a lápiz." },
+      { emoji: "🗳️📦", corto: "Voto en Prueba de Caja", frase: "Quiero depositar mi voto en la Prueba de Caja de la Escuela de Campo." },
+      { emoji: "✅👍", corto: "Estoy de acuerdo", frase: "Estoy totalmente de acuerdo con la propuesta para nuestra vereda." },
+      { emoji: "❓🙋", corto: "Pido explicación sencilla", frase: "Tengo una duda, ¿pueden explicarlo otra vez con dibujos sencillos?" }
+    ];
+
+    function renderizarPictogramasMudos() {
+      const grid = document.getElementById('grid-pictogramas-modal');
+      if (!grid) return;
+      grid.innerHTML = pictogramasMudos.map((item, i) => `
+        <button onclick="activarPictogramaMudo(${i})"
+          class="btn-tactil bg-white hover:bg-amber-100 border-3 border-sky-600 rounded-2xl p-3.5 flex flex-col items-center justify-center text-center">
+          <span class="text-4xl mb-1">${item.emoji}</span>
+          <span class="font-black text-sm sm:text-base text-stone-900">${item.corto}</span>
+        </button>
+      `).join('');
+    }
+
+    function activarPictogramaMudo(i) {
+      const item = pictogramasMudos[i];
+      document.getElementById('cartel-mensaje-mudo').textContent = `${item.emoji} ${item.frase}`;
+      agregarLineaTranscripcion(item.frase);
+      narrarTexto(item.frase, item.emoji);
+    }
+
+    function hablarTextoPersonalizadoMudo() {
+      const inp = document.getElementById('input-texto-mudo');
+      const txt = inp.value.trim();
+      if (!txt) return;
+      document.getElementById('cartel-mensaje-mudo').textContent = "🗣️ " + txt;
+      agregarLineaTranscripcion(txt);
+      narrarTexto(txt, "🗣️👐");
+    }
+
+    function abrirModalComunicadorMudo() {
+      const m = document.getElementById('modal-tablero-mudo');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+      narrarTexto('Tablero comunicador para personas mudas abierto. Toca cualquier dibujo para hablar en voz alta.', '👐🗣️');
+    }
+
+    function cerrarModalComunicadorMudo() {
+      const m = document.getElementById('modal-tablero-mudo');
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+    }
+
+    // ===================================================================
+    // 10. BITÁCORA MULTIMEDIA DE ARCHIVOS (PDF, JPEG, MP4, AUDIOS)
+    // ===================================================================
+    const archivosBitacora = [
+      {
+        id: 'ficha-sintesis-1',
+        nombre: 'Afiche_Sintesis_3_Proyectos_Unificados.svg',
+        tipo: 'IMAGEN',
+        modulo: 'Módulo 3 (Gold): Sistematización y Cartillas',
+        nota: 'Infografía integrada: Biotecnología y Saberes Ancestrales + Cafeto del Macizo + Agricultura de Precisión, Abejas y Fibras.',
+        url: 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300" width="100%" height="100%">
+            <rect width="600" height="300" rx="20" fill="#1E3522" stroke="#FBC02D" stroke-width="6"/>
+            <text x="300" y="42" font-family="sans-serif" font-size="20" font-weight="bold" fill="#FBC02D" text-anchor="middle">SÍNTESIS UNIFICADA DEL PROYECTO DE INVESTIGACIÓN</text>
+            <rect x="25" y="65" width="170" height="195" rx="14" fill="#FEF3C7"/>
+            <text x="110" y="95" font-family="sans-serif" font-size="15" font-weight="bold" fill="#78350F" text-anchor="middle">1. RAÍCES Y SABERES</text>
+            <text x="110" y="125" font-family="sans-serif" font-size="13" fill="#1C1917" text-anchor="middle">• Pueblos Originarios</text>
+            <text x="110" y="150" font-family="sans-serif" font-size="13" fill="#1C1917" text-anchor="middle">• Semillas Nativas</text>
+            <text x="110" y="175" font-family="sans-serif" font-size="13" fill="#1C1917" text-anchor="middle">• Mapas Parlantes</text>
+            <text x="110" y="200" font-family="sans-serif" font-size="13" fill="#1C1917" text-anchor="middle">• Ecología Microbiana</text>
+            <rect x="215" y="65" width="170" height="195" rx="14" fill="#DCFCE7"/>
+            <text x="300" y="95" font-family="sans-serif" font-size="15" font-weight="bold" fill="#14532D" text-anchor="middle">2. PRECISIÓN Y FIBRAS</text>
+            <text x="300" y="125" font-family="sans-serif" font-size="13" fill="#1C1917" text-anchor="middle">• Bienestar Alimentario</text>
+            <text x="300" y="150" font-family="sans-serif" font-size="13" fill="#1C1917" text-anchor="middle">• Cuidado de Abejas</text>
+            <text x="300" y="175" font-family="sans-serif" font-size="13" fill="#1C1917" text-anchor="middle">• Celular / GPS en Lote</text>
+            <text x="300" y="200" font-family="sans-serif" font-size="13" fill="#1C1917" text-anchor="middle">• Fibra para Plásticos</text>
+            <rect x="405" y="65" width="170" height="195" rx="14" fill="#E0F2FE"/>
+            <text x="490" y="95" font-family="sans-serif" font-size="15" font-weight="bold" fill="#0C4A6E" text-anchor="middle">3. HUB MACIZO E IAP</text>
+            <text x="490" y="125" font-family="sans-serif" font-size="13" fill="#1C1917" text-anchor="middle">• Escuelas de Campo</text>
+            <text x="490" y="150" font-family="sans-serif" font-size="13" fill="#1C1917" text-anchor="middle">• Prueba de Caja</text>
+            <text x="490" y="175" font-family="sans-serif" font-size="13" fill="#1C1917" text-anchor="middle">• Modelo OVOP-SENA</text>
+            <text x="490" y="200" font-family="sans-serif" font-size="13" fill="#1C1917" text-anchor="middle">• Relevo Generacional</text>
+          </svg>
+        `)
+      }
+    ];
+
+    function cargarArchivosBitacora(files) {
+      if (!files || !files.length) return;
+      const modulo = document.getElementById('select-modulo-archivo').value;
+      const notaInput = document.getElementById('input-descripcion-archivo').value.trim();
+
+      Array.from(files).forEach(f => {
+        const url = URL.createObjectURL(f);
+        const nombre = f.name.toLowerCase();
+        let tipo = 'OTRO';
+        if (f.type.startsWith('image/') || /\.(jpg|jpeg|png|webp|svg|gif)$/.test(nombre)) tipo = 'IMAGEN';
+        else if (f.type.startsWith('video/') || /\.(mp4|webm|mov)$/.test(nombre)) tipo = 'VIDEO';
+        else if (f.type === 'application/pdf' || /\.pdf$/.test(nombre)) tipo = 'PDF';
+        else if (f.type.startsWith('audio/') || /\.(mp3|wav|ogg)$/.test(nombre)) tipo = 'AUDIO';
+
+        archivosBitacora.unshift({
+          id: 'file-' + Date.now() + '-' + Math.random(),
+          nombre: f.name,
+          tipo: tipo,
+          modulo: modulo,
+          nota: notaInput || `Archivo cargado al repositorio del Hub Territorial (${f.name}).`,
+          url: url
+        });
+      });
+
+      document.getElementById('input-descripcion-archivo').value = '';
+      renderizarBitacora();
+      narrarTexto('Archivos integrados correctamente en la Bitácora Multimedia.', '📂✅');
+    }
+
+    function renderizarBitacora() {
+      const galeria = document.getElementById('galeria-bitacora');
+      if (!galeria) return;
+
+      galeria.innerHTML = archivosBitacora.map(a => {
+        let visor = '';
+        if (a.tipo === 'IMAGEN') {
+          visor = `<img src="${a.url}" alt="${a.nombre}" class="max-h-56 w-auto mx-auto rounded-xl border border-stone-300 object-contain bg-stone-100 p-1" />`;
+        } else if (a.tipo === 'VIDEO') {
+          visor = `<video src="${a.url}" controls class="w-full max-h-56 rounded-xl bg-black"></video>`;
+        } else if (a.tipo === 'PDF') {
+          visor = `<iframe src="${a.url}" class="w-full h-56 rounded-xl border border-stone-300 bg-white"></iframe>`;
+        } else if (a.tipo === 'AUDIO') {
+          visor = `<audio src="${a.url}" controls class="w-full mt-2"></audio>`;
+        } else {
+          visor = `<div class="bg-stone-100 p-4 rounded-xl text-center font-black text-stone-700">📎 Documento adjunto: ${a.nombre}</div>`;
+        }
+
+        const notaSegura = a.nota.replace(/['"]/g, '');
+        return `
+          <div class="bg-white rounded-2xl p-5 border-2 border-stone-300 shadow flex flex-col justify-between gap-3">
+            <div>
+              <span class="text-xs font-black bg-emerald-100 text-emerald-900 px-2.5 py-1 rounded-lg inline-block mb-2">${a.modulo}</span>
+              <h4 class="font-black text-stone-900 text-base sm:text-lg break-words">${a.nombre}</h4>
+              <p class="text-xs sm:text-sm font-bold text-stone-600 mt-1 mb-3">${a.nota}</p>
+              ${visor}
+            </div>
+            <div class="flex justify-between items-center pt-2 border-t border-stone-200">
+              <button onclick="narrarTexto('${notaSegura}', '📂🔊')"
+                class="bg-[#FBC02D] text-stone-950 font-black px-3.5 py-1.5 rounded-xl text-xs sm:text-sm border border-stone-900">
+                🔊 Escuchar Descripción
+              </button>
+              <a href="${a.url}" download="${a.nombre}"
+                class="bg-emerald-800 text-white font-black px-3.5 py-1.5 rounded-xl text-xs sm:text-sm">
+                ⬇️ Descargar
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ===================================================================
+    // INICIALIZACIÓN GENERAL AL CARGAR LA VENTANA
+    // ===================================================================
+    window.onload = function() {
+      if ('speechSynthesis' in window) window.speechSynthesis.getVoices();
+      filtrarPosits('TODOS');
+      inicializarMapaParlante();
+      renderizarLotesECA();
+      probarCargaBioplastico(1);
+      renderizarPruebaDeCaja();
+      actualizarCalculadoraEconomica();
+      renderizarPictogramasMudos();
+      renderizarBitacora();
+    };
+  </script>
+</body>
+</html>
